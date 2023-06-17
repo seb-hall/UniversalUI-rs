@@ -1,0 +1,3 @@
+[submodule "UniversalUI-IPC"]
+	path = UniversalUI-IPC
+	url = https://github.com/seb-hall/UniversalUI-IPC.git
