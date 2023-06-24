@@ -1,1 +1,0 @@
-C:\Users\sebam\Documents\UniversalUI\universalui_core\target\debug\libuniversalui_core.rlib: C:\Users\sebam\Documents\UniversalUI\universalui_core\src\geometry.rs C:\Users\sebam\Documents\UniversalUI\universalui_core\src\lib.rs C:\Users\sebam\Documents\UniversalUI\universalui_core\src\string.rs C:\Users\sebam\Documents\UniversalUI\universalui_core\src\window.rs

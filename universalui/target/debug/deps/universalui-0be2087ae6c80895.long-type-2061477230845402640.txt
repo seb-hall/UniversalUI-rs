@@ -1,0 +1,1 @@
+unsafe fn(_, u32, _, _) -> windows::Win32::Foundation::LRESULT {windows::Win32::UI::WindowsAndMessaging::DefWindowProcA::<_, _, _>}
