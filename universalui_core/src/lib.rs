@@ -1,14 +1,13 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+//  universalui_core - src/lib.rs
+//  created by sebhall on 24/06/2023
+//
+//  universalui_core provides the base types common to all
+//  parts of the framework, and is a dependency of all other
+//  UniversalUI crates. Developers should use the universalui
+//  crate rather than this crate directly.
+//
+//  src/lib.rs contains the crate root functions and modules.
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub mod geometry;
+pub mod string;
+pub mod window;
