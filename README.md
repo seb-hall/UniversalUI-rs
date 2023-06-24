@@ -8,10 +8,29 @@ Popular frameworks such as Electron and Flutter are easier to develop with JavaS
 Alternatives such as Qt and wxWidgets improve on performance and but increase development complexity and often lack good mobile support.
 
 UniversalUI aims to find the best of both worlds - providing extremely high efficiency while using a very simple and lean API.
-It is designed as a complete, modular system that supports multiple languages and design methods, while allowing mobile and desktop applications to be developed from a singular, lean codebase.
 
 ## Architecture
 
+UniversalUI is built primarily in Rust, and organised into a series of *crates*.
+
+**universalui_core** provides the core functionality and types of UniversalUI. It is used internally by other crates, 
+and contains everything you need to design and build basic apps for any platform.
+
+**universalui_vulkan** implements Vulkan rendering for Windows, Linux and Android.
+
+**universalui_metal** implements Metal rendering for macOS, iPadOS and iOS.
+
+**universalui_win32** is a crate specifically designed for the Windows platform, not intended for end users.
+
+**universalui_linux** is a crate specifically designed for the Linux platform, not intended for end users.
+
+**universalui_macOS** is a crate specifically designed for the macOS platform, not intended for end users.
+
+**universalui_iOS** is a crate specifically designed for the iOS/iPadOS platforms, not intended for end users.
+
+**universalui_android** is a crate specifically designed for the Android platform, not intended for end users.
+
+<!---
 Central to UniversalUI is the **UniversalUI-Server**. 
 This manages communication between UniversalUI modules, and is key to the flexibility of UniversalUI.
 It can be installed as a shared framework (UNIX platforms only), or bundled within the application bundle (all plaforms).
@@ -31,4 +50,6 @@ Clients can be written with a variety of languages, although support for each la
 The core framework includes a variety of modules that provide key functionality such as windowing and rendering.
 Custom and 3rd party modules can be designed, allowing for even more flexibility and modularity.
 Modules can be installed system-wide (UNIX platforms only) or locally within the application bundle (all platforms).
+
+-->
 
