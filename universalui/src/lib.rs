@@ -15,11 +15,11 @@ pub mod window;
 pub mod windowHandler;
 
 pub fn universalui_init() {
-    #[cfg_attr(target_os = "windows", path = "win32/lib.rs")]
-    #[cfg_attr(target_os = "linux", path = "linux/lib.rs")]
-    mod plm;
+    //#[cfg_attr(target_os = "windows", path = "win32/lib.rs")]
+    //#[cfg_attr(target_os = "linux", path = "linux/lib.rs")]
+    //mod plm;
 
-    plm::init();
+    //plm::init();
 
     println!("Welcome to UniversalUI on Rust");
 }
