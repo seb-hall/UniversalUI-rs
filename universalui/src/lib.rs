@@ -12,7 +12,8 @@
 pub mod geometry;
 pub mod string;
 pub mod window;
-pub mod windowHandler;
+pub mod view;
+pub mod interaction;
 
 pub fn universalui_init() {
     //#[cfg_attr(target_os = "windows", path = "win32/lib.rs")]
