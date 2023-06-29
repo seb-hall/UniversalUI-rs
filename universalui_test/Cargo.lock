@@ -1112,6 +1112,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b15811caf2415fb889178633e7724bad2509101cde276048e013b9def5e51fa0"
 
 [[package]]
+name = "universalui"
+version = "0.1.0"
+dependencies = [
+ "winit",
+]
+
+[[package]]
 name = "universalui_test"
 version = "0.1.0"
 dependencies = [
@@ -1123,6 +1130,7 @@ dependencies = [
  "pretty_env_logger",
  "thiserror",
  "tobj",
+ "universalui",
  "vulkanalia",
  "winit",
 ]
