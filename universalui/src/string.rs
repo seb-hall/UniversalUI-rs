@@ -12,16 +12,24 @@
 #![allow(non_camel_case_types)]
 
 pub struct uString {
-    pub rust_string: String
+    pub raw: String,
 }
 
 impl uString {
 
     //  standard init function from components
     pub fn init(from: &str) -> Self {
+
+        let mut newString = 
+
         return uString {
-            rust_string: String::from(from)
-        }
+            raw: String::from(from),
+        };
+
+    }
+
+    pub fn str(&self) -> &str {
+        return &self.raw[..];
     }
 
 }

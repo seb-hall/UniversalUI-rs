@@ -14,6 +14,11 @@
 use crate::geometry::*;
 use crate::string::*;
 
+use winit::dpi::LogicalSize;
+use winit::event::{Event, WindowEvent};
+use winit::event_loop::{ControlFlow, EventLoop};
+use winit::window::*;
+
 use std::rc::Rc;
 
 
@@ -31,6 +36,13 @@ impl uWindow {
     //  uWindow init function, takes arguments of title, frame and handler
     pub fn init(title: uString, frame: uRect, handler: uWindowHandler) -> Self {
         let handlerRef = Rc::new(handler);
+        let mut event_loop = EventLoop::new();
+        let window = WindowBuilder::new().build(&event_loop).unwrap();
+        
+        window.set_title(title.str());
+        window.set_inner_size(LogicalSize::new(frame.width, frame.height));
+        window.set_visible(true);
+
         return uWindow { title: title, frame: frame, handler: handlerRef};
     }
 
