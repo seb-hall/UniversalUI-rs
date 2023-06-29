@@ -13,22 +13,17 @@ UniversalUI aims to find the best of both worlds - providing extremely high effi
 
 UniversalUI is built primarily in Rust, and organised into a series of *crates*.
 
-**universalui_core** provides the core functionality and types of UniversalUI. It is used internally by other crates, 
-and contains everything you need to design and build basic apps for any platform.
+### API Design
 
-**universalui_vulkan** implements Vulkan rendering for Windows, Linux and Android.
+The UniversalUI API is implemented as a set of **Handlers** and **Objects**.
 
-**universalui_metal** implements Metal rendering for macOS, iPadOS and iOS.
+Handlers implement a set of methods that are called when certain events occur.
+Objects contain methods and parameters that can be called by the system.
 
-**universalui_win32** is a crate specifically designed for the Windows platform, not intended for end users.
+A good example of this is Window creation. A Window obnject is created with size, title and an event handler.
+The handler contains custom functions to implement logic for when the window is resized or closed.
 
-**universalui_linux** is a crate specifically designed for the Linux platform, not intended for end users.
-
-**universalui_macOS** is a crate specifically designed for the macOS platform, not intended for end users.
-
-**universalui_iOS** is a crate specifically designed for the iOS/iPadOS platforms, not intended for end users.
-
-**universalui_android** is a crate specifically designed for the Android platform, not intended for end users.
+Objects implement a set of traits that inherit special functionality such as cursor/touch response, form focus, keyboard input, drag functionality and rendering.
 
 <!---
 Central to UniversalUI is the **UniversalUI-Server**. 
