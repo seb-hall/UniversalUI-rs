@@ -1,1 +1,1 @@
-C:\Users\sebam\Documents\UniversalUI\universalui_macos\target\debug\libuniversalui_macos.rlib: C:\Users\sebam\Documents\UniversalUI\universalui_macos\src\lib.rs
+/Users/seb/Documents/UniversalUI/universalui_macos/target/debug/libuniversalui_macos.rlib: /Users/seb/Documents/UniversalUI/universalui_macos/src/lib.rs
