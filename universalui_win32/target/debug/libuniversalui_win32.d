@@ -1,1 +1,0 @@
-C:\Users\sebam\Documents\UniversalUI-GPU\universalui_win32\target\debug\libuniversalui_win32.rlib: C:\Users\sebam\Documents\UniversalUI-GPU\universalui_win32\src\core.rs C:\Users\sebam\Documents\UniversalUI-GPU\universalui_win32\src\lib.rs C:\Users\sebam\Documents\UniversalUI-GPU\universalui_win32\src\window.rs
