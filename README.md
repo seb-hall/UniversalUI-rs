@@ -1,5 +1,5 @@
 # UniversalUI
-Cross-Platform Development 2
+A New Approach to Cross-Platform Development
 
 ## Motivation
 
@@ -13,14 +13,23 @@ UniversalUI aims to find the best of both worlds - providing extremely high effi
 
 UniversalUI is built primarily in Rust, and organised into a series of *crates*.
 
+The base crate is **universalui_core**. This defines base traits and structs required by all parts of the framework.
+
+Each platform supported by UniversalUI contains a specific crate implementing platform-specific functionality.
+One area where this has a significant impact is in graphics rendering. 
+Different platforms suport different graphics rendering APIs so the platform crates make use of the available APIs.
+
 ### API Design
 
-The UniversalUI API is implemented as a set of **Handlers** and **Objects**.
+The UniversalUI API is implemented as a set of **Traits**, **Handlers** and **Objects**.
+
+Traits define the behaviour of visual/phyiscal elements such as windows, views and buttons.
 
 Handlers implement a set of methods that are called when certain events occur.
-Objects contain methods and parameters that can be called by the system.
 
-A good example of this is Window creation. A Window obnject is created with size, title and an event handler.
+Objects implement functionality and are affected by handler events.
+
+A good example of this is Window creation. A Window object is created with size, title and an event handler.
 The handler contains custom functions to implement logic for when the window is resized or closed.
 
 Objects implement a set of traits that inherit special functionality such as cursor/touch response, form focus, keyboard input, drag functionality and rendering.
