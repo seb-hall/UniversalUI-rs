@@ -25,7 +25,7 @@ pub fn debug_info(message: &str) {
 pub fn debug_warning(message: &str) {
     println!(
         "{} {}",
-        "[UUI-WRN]:".yellow(),
+        "[UUI-WNG]:".yellow(),
         message
     )
 }

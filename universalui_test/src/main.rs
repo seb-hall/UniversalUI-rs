@@ -1,7 +1,9 @@
-use universalui::{*, application::uApplication, core::string::uString};
+use universalui::{*, application::uApplication, core::string::uString, core::{window::uWindow, geometry::*}};
 
-fn finished_launch() {
+fn finished_launch(sender: &mut uApplication) {
 
+    let window = uWindow::init(uString::init("hello universalui"), uRect::init(0.0, 0.0, 800.0, 600.0));
+    sender.show_window(window);
 }
 
 fn will_q() {
@@ -10,7 +12,7 @@ fn will_q() {
 
 fn main() {
     
-    let app = uApplication::init_simple(
+    let mut app = uApplication::init_desktop(
         "universalui test", 
         "developer", 
         0, 
@@ -19,10 +21,6 @@ fn main() {
         will_q
     );
 
-    let num_windows = app.windows().len();
-
-    universalui_init(app);
-
+    universalui_init(&mut app);
     
-
 }

@@ -13,21 +13,28 @@ pub mod core {
     pub use universalui_core::*;
 }
 
-
 pub mod application;
+
 use crate::core::debug::*;
+use crate::application::*;
 
-pub fn universalui_init(application: application::uApplication) {
-    //#[cfg_attr(target_os = "windows", path = "win32/lib.rs")]
-    //#[cfg_attr(target_os = "linux", path = "linux/lib.rs")]
-    //mod plm;
-
-    //plm::init();
+//  universalui_init function, this takes a mutable reference
+//  to an instance of uApplication and runs the main application
+//  logic. Running any functions before this one is called results
+//  in undefined behavior. This function will only return when the 
+//  application has been quit, and so no code should be run after
+//  this in the main function.
+pub fn universalui_init(application: &mut uApplication) {
 
     debug_info("Welcome to UniversalUI on Rust");
     debug_info(&format!("Initialising '{}' v{}.{}", application.name.str(), application.major_version, application.minor_version)[..]);
-    debug_info("this is some info");
-    debug_warning("this is a warning");
-    debug_error("this is an error");
-    debug_critical("this is a critical error");
+    
+    //  init graphics etc
+
+    (application.finished_launching)(application);
+
+    (application.will_quit)();
+
+    debug_info("application completed with no issues");
+
 }
