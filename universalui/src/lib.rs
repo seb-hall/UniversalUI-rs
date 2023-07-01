@@ -24,16 +24,16 @@ use crate::application::*;
 //  in undefined behavior. This function will only return when the 
 //  application has been quit, and so no code should be run after
 //  this in the main function.
-pub fn universalui_init(application: &mut uApplication) {
+pub fn universalui_init(mut application: uApplication) {
 
     debug_info("Welcome to UniversalUI on Rust");
     debug_info(&format!("Initialising '{}' v{}.{}", application.name.str(), application.major_version, application.minor_version)[..]);
     
     //  init graphics etc
 
-    (application.finished_launching)(application);
+    (application.finished_launching)(&mut application);
 
-    (application.will_quit)();
+    application.run();
 
     debug_info("application completed with no issues");
 

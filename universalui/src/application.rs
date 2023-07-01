@@ -16,6 +16,11 @@ use universalui_core::string::*;
 use universalui_core::window::*;
 use universalui_core::debug::*;
 
+use winit::dpi::LogicalSize;
+use winit::event::{Event, WindowEvent};
+use winit::event_loop::{ControlFlow, EventLoop};
+use winit::window::{Window, WindowBuilder};
+
 use core::panic;
 
 //  uApplicationConfiguration struct, contains window information,
@@ -47,6 +52,9 @@ pub struct uApplication {
 
     //  app configuration enum
     app_config: uApplicationConfiguration,
+
+    //  event loop
+    event_loop: EventLoop<()>,
     
     //  handler functions
     pub finished_launching: fn(sender: &mut uApplication),
@@ -60,6 +68,7 @@ impl uApplication {
     //  init_simple function, for initialising simple apps
     pub fn init_simple(name: &str, developer: &str, major_version: i32, minor_version: i32, preferred_size: uRect, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
+            event_loop: EventLoop::new(),
             app_config: uApplicationConfiguration::simple { window: uWindow::default(), preferred_size: preferred_size},
             name: uString::init(name),
             developer: uString::init(developer),
@@ -75,6 +84,7 @@ impl uApplication {
     //  init_desktop function, for initialising desktop apps
     pub fn init_desktop(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
+            event_loop: EventLoop::new(),
             app_config: uApplicationConfiguration::desktop { windows: Vec::new() },
             name: uString::init(name),
             developer: uString::init(developer),
@@ -90,6 +100,7 @@ impl uApplication {
     //  init_other function, for initialising other apps
     pub fn init_other(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
+            event_loop: EventLoop::new(),
             app_config: uApplicationConfiguration::other { windows: Vec::new() },
             name: uString::init(name),
             developer: uString::init(developer),
@@ -100,28 +111,6 @@ impl uApplication {
         };
 
         return app;
-    }
-
-    //  show_window function. This is supported for desktop and other apps.
-    //  Calling this function from a simple app will do nothing.
-    pub fn show_window(&mut self, window: uWindow) {
-
-        match &mut self.app_config {
-            uApplicationConfiguration::simple { .. } => {
-                debug_error("simple appplication tried to add a new window, consider changing to a desktop application.");
-                return;
-            },
-            uApplicationConfiguration::desktop { windows } => {
-                debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-                windows.push(window);
-                return;
-            },
-            uApplicationConfiguration::other { windows } => {
-                windows.push(window);
-                return;
-            }
-        }
-        
     }
 
     //  windows function, returns a reference to the windows vector in
@@ -159,6 +148,68 @@ impl uApplication {
                 panic!();
             }
         }
+    }
+
+    //  show_window function. This is supported for desktop and other apps.
+    //  Calling this function from a simple app will do nothing.
+    pub fn show_window(&mut self, mut window: uWindow) {
+
+        match &mut self.app_config {
+            uApplicationConfiguration::simple { .. } => {
+                debug_error("simple appplication tried to add a new window, consider changing to a desktop application.");
+                return;
+            },
+            uApplicationConfiguration::desktop { windows } => {
+                debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
+                window.window_handle = Some(WindowBuilder::new()
+                    .with_title(window.title.str())
+                    .with_inner_size(LogicalSize::new(window.frame.width, window.frame.height))
+                    .build(&self.event_loop).unwrap());
+                windows.push(window);
+                return;
+            },
+            uApplicationConfiguration::other { windows } => {
+                windows.push(window);
+                return;
+            }
+        }
+        
+    }
+
+    pub fn run(self) {
+        self.event_loop.run(move |event, _, control_flow| {        
+            // ControlFlow::Wait pauses the event loop if no events are available to process.
+            // This is ideal for non-game applications that only update in response to user
+            // input, and uses significantly less power/CPU time than ControlFlow::Poll.
+            control_flow.set_wait();
+        
+            match event {
+                Event::WindowEvent {
+                    event: WindowEvent::CloseRequested,
+                    ..
+                } => {
+                    debug_info("close button pressed");
+                    //control_flow.set_exit();
+                },
+                Event::MainEventsCleared => {
+                    // Application update code.
+        
+                    // Queue a RedrawRequested event.
+                    //
+                    // You only need to call this if you've determined that you need to redraw, in
+                    // applications which do not always need to. Applications that redraw continuously
+                    // can just render here instead.
+                },
+                Event::RedrawRequested(_) => {
+                    // Redraw the application.
+                    //
+                    // It's preferable for applications that do not render continuously to render in
+                    // this event rather than in MainEventsCleared, since rendering in here allows
+                    // the program to gracefully handle redraws requested by the OS.
+                },
+                _ => ()
+            }
+        });
     }
 
 

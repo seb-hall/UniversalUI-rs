@@ -2,8 +2,12 @@ use universalui::{*, application::uApplication, core::string::uString, core::{wi
 
 fn finished_launch(sender: &mut uApplication) {
 
-    let window = uWindow::init(uString::init("hello universalui"), uRect::init(0.0, 0.0, 800.0, 600.0));
-    sender.show_window(window);
+    let window1 = uWindow::init(uString::init("I am window 1"), uRect::init(0.0, 0.0, 800.0, 600.0));
+    let window2 = uWindow::init(uString::init("I am window 2"), uRect::init(0.0, 0.0, 800.0, 600.0));
+
+    sender.show_window(window1);
+    sender.show_window(window2);
+
 }
 
 fn will_q() {
@@ -21,6 +25,5 @@ fn main() {
         will_q
     );
 
-    universalui_init(&mut app);
-    
+    universalui_init(app);
 }
