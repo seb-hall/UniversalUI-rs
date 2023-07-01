@@ -1,30 +1,28 @@
-use universalui::*;
+use universalui::{*, application::uApplication, core::string::uString};
 
-fn resized(_: geometry::uSize) {
-    println!("window resized!");
+fn finished_launch() {
+
+}
+
+fn will_q() {
+
 }
 
 fn main() {
-    universalui_init();
-
-    let mut handler = window::uWindowHandler { 
-        window_resized: resized,
-        ..Default::default()
-    };
-
-    handler.window_resized = resized;
-
-    let my_string = string::uString::init("here is some string");
-
-    //let window = window::uWindow::init(my_string, geometry::uRect::init(0.0, 0.0, 1000.0, 750.0), handler.clone());
-    let window2 = window::uWindow::init(string::uString::init("here is sanother string with some text"), geometry::uRect::init(0.0, 0.0, 1000.0, 750.0), handler);
     
-    (window2.handler.window_resized)(geometry::uSize::init(100.0, 100.0));
-    (window2.handler.window_created)();
+    let app = uApplication::init_simple(
+        "universalui test", 
+        "developer", 
+        0, 
+        1,
+        finished_launch,
+        will_q
+    );
 
-    println!("testing universalui");
+    let num_windows = app.windows().len();
 
-    while (true) {
+    universalui_init(app);
 
-    }
+    
+
 }
