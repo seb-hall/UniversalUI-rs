@@ -31,3 +31,9 @@ impl uString {
     }
 
 }
+
+impl Clone for uString {
+    fn clone(&self) -> Self {
+        return uString::init(self.str());
+    }
+}

@@ -26,19 +26,19 @@ running: cd "/Users/seb/Documents/UniversalUI/universalui_test/target/debug/buil
 -- Found Threads: TRUE  
 -- Using Cocoa for window creation
 -- Configuring done (0.4s)
--- Generating done (0.1s)
+-- Generating done (0.0s)
 -- Build files have been written to: /Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build
 running: cd "/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build" && MAKEFLAGS="-j --jobserver-fds=7,8 --jobserver-auth=7,8" "cmake" "--build" "." "--target" "install" "--config" "Debug"
-[  6%] Building C object src/CMakeFiles/glfw.dir/input.c.o
-[ 12%] Building C object src/CMakeFiles/glfw.dir/monitor.c.o
-[ 18%] Building C object src/CMakeFiles/glfw.dir/context.c.o
-[ 25%] Building C object src/CMakeFiles/glfw.dir/init.c.o
-[ 31%] Building C object src/CMakeFiles/glfw.dir/vulkan.c.o
-[ 37%] Building C object src/CMakeFiles/glfw.dir/cocoa_joystick.m.o
-[ 43%] Building C object src/CMakeFiles/glfw.dir/cocoa_monitor.m.o
-[ 50%] Building C object src/CMakeFiles/glfw.dir/cocoa_init.m.o
-[ 56%] Building C object src/CMakeFiles/glfw.dir/cocoa_window.m.o
-[ 62%] Building C object src/CMakeFiles/glfw.dir/window.c.o
+[  6%] Building C object src/CMakeFiles/glfw.dir/vulkan.c.o
+[ 12%] Building C object src/CMakeFiles/glfw.dir/context.c.o
+[ 25%] Building C object src/CMakeFiles/glfw.dir/input.c.o
+[ 25%] Building C object src/CMakeFiles/glfw.dir/cocoa_joystick.m.o
+[ 31%] Building C object src/CMakeFiles/glfw.dir/window.c.o
+[ 37%] Building C object src/CMakeFiles/glfw.dir/cocoa_init.m.o
+[ 43%] Building C object src/CMakeFiles/glfw.dir/monitor.c.o
+[ 50%] Building C object src/CMakeFiles/glfw.dir/init.c.o
+[ 62%] Building C object src/CMakeFiles/glfw.dir/cocoa_monitor.m.o
+[ 62%] Building C object src/CMakeFiles/glfw.dir/cocoa_window.m.o
 [ 68%] Building C object src/CMakeFiles/glfw.dir/cocoa_time.c.o
 [ 75%] Building C object src/CMakeFiles/glfw.dir/posix_thread.c.o
 [ 81%] Building C object src/CMakeFiles/glfw.dir/nsgl_context.m.o

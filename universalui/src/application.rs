@@ -157,7 +157,6 @@ impl uApplication {
             uApplicationConfiguration::desktop { windows } => {
                 debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
                 self.glfw.window_hint(glfw::WindowHint::Visible(true));
-                //self.glfw.window_hint(glfw::WindowHint::TransparentFramebuffer(true));
                 let (mut gl_window, events) = self.glfw.create_window(window.frame.width as u32, window.frame.height as u32, window.title.str(), glfw::WindowMode::Windowed)
                 .expect("Failed to create GLFW window.");
                 gl_window.set_key_polling(true);
@@ -167,6 +166,13 @@ impl uApplication {
                 return;
             },
             uApplicationConfiguration::other { windows } => {
+                debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
+                self.glfw.window_hint(glfw::WindowHint::Visible(true));
+                let (mut gl_window, events) = self.glfw.create_window(window.frame.width as u32, window.frame.height as u32, window.title.str(), glfw::WindowMode::Windowed)
+                .expect("Failed to create GLFW window.");
+                gl_window.set_key_polling(true);
+                gl_window.make_current();
+                window.window_handle = Some((gl_window, events));
                 windows.push(window);
                 return;
             }
@@ -174,13 +180,60 @@ impl uApplication {
         
     }
 
-    pub fn run(mut self) {
-        while (true) {
-            self.glfw.wait_events();
-        }
-        
+    pub fn run(&mut self) {
 
+        match &mut self.app_config {
+            uApplicationConfiguration::simple { window, preferred_size } => {
+                let mut newWindow = uWindow::default();
+                self.glfw.window_hint(glfw::WindowHint::Visible(true));
+                let (mut gl_window, events) = self.glfw.create_window(preferred_size.width as u32, preferred_size.height as u32, self.name.str(), glfw::WindowMode::Windowed)
+                .expect("Failed to create GLFW window.");
+                gl_window.set_key_polling(true);
+                gl_window.make_current();
+                let (x, y) = gl_window.get_pos();
+                let (w, h) = gl_window.get_size();
+                newWindow.window_handle = Some((gl_window, events));
+                newWindow.title = self.name.clone();
+                newWindow.frame = uRect::init(x as f32, y as f32, w as f32, h as f32);
+                *window = newWindow;
+
+        
+                while !window.window_handle.as_mut().unwrap().0.should_close() {
+                    self.glfw.wait_events();
+                    println!("event occurred")
+                }
+            },
+            uApplicationConfiguration::desktop { windows } => {
+                let mut windows_open: bool = true;
+
+                while windows_open {
+                    self.glfw.wait_events();
+
+                    for ref window in &mut *windows {
+                        for (_, event) in glfw::flush_messages(&window.window_handle.as_ref().unwrap().1) {
+                            handle_event(window, &window.window_handle.as_ref().unwrap().0, event);
+                        }
+                    }œß
+                }
+
+            },
+            uApplicationConfiguration::other { windows } => {
+                while !windows.is_empty() {
+                    self.glfw.wait_events();
+                }
+            }
+        }
+
+        fn handle_event(window: &uWindow, glfw_window: &glfw::Window, event: glfw::WindowEvent) {
+            if event == glfw::WindowEvent::Close {
+                debug_info("window should close");
+            }
+
+            println!("event!")
+        }
+    
     }
+
 
 
 }

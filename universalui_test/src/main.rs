@@ -16,11 +16,12 @@ fn will_q() {
 
 fn main() {
     
-    let mut app = uApplication::init_desktop(
+    let app = uApplication::init_desktop(
         "universalui test", 
         "developer", 
         0, 
         1,
+        //uRect { x: 0.0, y: 0.0, width: 800.0, height: 600.0 },
         finished_launch,
         will_q
     );
