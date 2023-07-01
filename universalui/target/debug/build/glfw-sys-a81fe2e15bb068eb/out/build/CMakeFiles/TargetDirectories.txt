@@ -1,0 +1,15 @@
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/uninstall.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/edit_cache.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/rebuild_cache.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/list_install_components.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/install.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/install/local.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/CMakeFiles/install/strip.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/update_mappings.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/glfw.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/edit_cache.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/rebuild_cache.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/list_install_components.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/install.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/install/local.dir
+/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/build/src/CMakeFiles/install/strip.dir

@@ -11,16 +11,18 @@
 
 #![allow(non_camel_case_types)]
 
+use std::sync::mpsc::Receiver;
+
 use crate::geometry::*;
 use crate::string::*;
 
-use winit::window::Window;
+use glfw::*;
 
 //  uWindow - a top-level application window
 pub struct uWindow {
     pub title: uString,
     pub frame: uRect,
-    pub window_handle: Option<Window>
+    pub window_handle: Option<(Window, Receiver<(f64, WindowEvent)>)>
 }
 
 //  uWindow specific functions

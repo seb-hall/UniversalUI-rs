@@ -16,10 +16,7 @@ use universalui_core::string::*;
 use universalui_core::window::*;
 use universalui_core::debug::*;
 
-use winit::dpi::LogicalSize;
-use winit::event::{Event, WindowEvent};
-use winit::event_loop::{ControlFlow, EventLoop};
-use winit::window::{Window, WindowBuilder};
+use glfw::*;
 
 use core::panic;
 
@@ -52,9 +49,7 @@ pub struct uApplication {
 
     //  app configuration enum
     app_config: uApplicationConfiguration,
-
-    //  event loop
-    event_loop: EventLoop<()>,
+    glfw: Glfw,
     
     //  handler functions
     pub finished_launching: fn(sender: &mut uApplication),
@@ -68,7 +63,7 @@ impl uApplication {
     //  init_simple function, for initialising simple apps
     pub fn init_simple(name: &str, developer: &str, major_version: i32, minor_version: i32, preferred_size: uRect, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            event_loop: EventLoop::new(),
+            glfw: glfw::init(glfw::FAIL_ON_ERRORS).unwrap(),
             app_config: uApplicationConfiguration::simple { window: uWindow::default(), preferred_size: preferred_size},
             name: uString::init(name),
             developer: uString::init(developer),
@@ -84,7 +79,7 @@ impl uApplication {
     //  init_desktop function, for initialising desktop apps
     pub fn init_desktop(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            event_loop: EventLoop::new(),
+            glfw: glfw::init(glfw::FAIL_ON_ERRORS).unwrap(),
             app_config: uApplicationConfiguration::desktop { windows: Vec::new() },
             name: uString::init(name),
             developer: uString::init(developer),
@@ -100,7 +95,7 @@ impl uApplication {
     //  init_other function, for initialising other apps
     pub fn init_other(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            event_loop: EventLoop::new(),
+            glfw: glfw::init(glfw::FAIL_ON_ERRORS).unwrap(),
             app_config: uApplicationConfiguration::other { windows: Vec::new() },
             name: uString::init(name),
             developer: uString::init(developer),
@@ -161,10 +156,13 @@ impl uApplication {
             },
             uApplicationConfiguration::desktop { windows } => {
                 debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-                window.window_handle = Some(WindowBuilder::new()
-                    .with_title(window.title.str())
-                    .with_inner_size(LogicalSize::new(window.frame.width, window.frame.height))
-                    .build(&self.event_loop).unwrap());
+                self.glfw.window_hint(glfw::WindowHint::Visible(true));
+                //self.glfw.window_hint(glfw::WindowHint::TransparentFramebuffer(true));
+                let (mut gl_window, events) = self.glfw.create_window(window.frame.width as u32, window.frame.height as u32, window.title.str(), glfw::WindowMode::Windowed)
+                .expect("Failed to create GLFW window.");
+                gl_window.set_key_polling(true);
+                gl_window.make_current();
+                window.window_handle = Some((gl_window, events));
                 windows.push(window);
                 return;
             },
@@ -176,40 +174,12 @@ impl uApplication {
         
     }
 
-    pub fn run(self) {
-        self.event_loop.run(move |event, _, control_flow| {        
-            // ControlFlow::Wait pauses the event loop if no events are available to process.
-            // This is ideal for non-game applications that only update in response to user
-            // input, and uses significantly less power/CPU time than ControlFlow::Poll.
-            control_flow.set_wait();
+    pub fn run(mut self) {
+        while (true) {
+            self.glfw.wait_events();
+        }
         
-            match event {
-                Event::WindowEvent {
-                    event: WindowEvent::CloseRequested,
-                    ..
-                } => {
-                    debug_info("close button pressed");
-                    //control_flow.set_exit();
-                },
-                Event::MainEventsCleared => {
-                    // Application update code.
-        
-                    // Queue a RedrawRequested event.
-                    //
-                    // You only need to call this if you've determined that you need to redraw, in
-                    // applications which do not always need to. Applications that redraw continuously
-                    // can just render here instead.
-                },
-                Event::RedrawRequested(_) => {
-                    // Redraw the application.
-                    //
-                    // It's preferable for applications that do not render continuously to render in
-                    // this event rather than in MainEventsCleared, since rendering in here allows
-                    // the program to gracefully handle redraws requested by the OS.
-                },
-                _ => ()
-            }
-        });
+
     }
 
 

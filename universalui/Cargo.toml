@@ -10,6 +10,8 @@ exclude = [
 ]
 
 [dependencies]
+gl = "0.14.0"
+glfw = "0.52.0"
 universalui_core = { path = "../universalui_core" }
 winit = "0.28.6"
 

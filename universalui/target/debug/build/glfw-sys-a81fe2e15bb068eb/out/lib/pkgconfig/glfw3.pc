@@ -1,0 +1,13 @@
+prefix=/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out
+exec_prefix=${prefix}
+includedir=/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/include
+libdir=/Users/seb/Documents/UniversalUI/universalui/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib
+
+Name: GLFW
+Description: A multi-platform library for OpenGL, window and input
+Version: 3.3.5
+URL: https://www.glfw.org/
+Requires.private: 
+Libs: -L${libdir} -lglfw3
+Libs.private:  -framework Cocoa -framework IOKit -framework CoreFoundation
+Cflags: -I${includedir}
