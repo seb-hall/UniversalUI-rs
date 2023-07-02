@@ -1,8 +1,0 @@
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/libglfw3.a
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/include/GLFW/glfw3.h
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/include/GLFW/glfw3native.h
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/cmake/glfw3/glfw3Config.cmake
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/cmake/glfw3/glfw3ConfigVersion.cmake
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/cmake/glfw3/glfw3Targets.cmake
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/cmake/glfw3/glfw3Targets-debug.cmake
-/Users/seb/Documents/UniversalUI/universalui_test/target/debug/build/glfw-sys-a81fe2e15bb068eb/out/lib/pkgconfig/glfw3.pc
