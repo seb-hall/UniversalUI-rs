@@ -213,7 +213,7 @@ impl uApplication {
                         for (_, event) in glfw::flush_messages(&window.window_handle.as_ref().unwrap().1) {
                             handle_event(window, &window.window_handle.as_ref().unwrap().0, event);
                         }
-                    }œß
+                    }
                 }
 
             },

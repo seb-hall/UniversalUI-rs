@@ -1,1 +1,0 @@
-unsafe extern "system" fn(windows::Win32::Foundation::HWND, u32, windows::Win32::Foundation::WPARAM, windows::Win32::Foundation::LPARAM) -> windows::Win32::Foundation::LRESULT
