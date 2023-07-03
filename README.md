@@ -11,13 +11,21 @@ UniversalUI aims to find the best of both worlds - providing extremely high effi
 
 ## Architecture
 
-UniversalUI is built primarily in Rust, and organised into a series of *crates*.
+UniversalUI is built primarily in Rust, and organised into a series of modules, or *crates*.
+
+The top-level crate is **universal_ui**. This is the only crate required for importing to your project, and provides access to all other modules.
 
 The base crate is **universalui_core**. This defines base traits and structs required by all parts of the framework.
 
-Each platform supported by UniversalUI contains a specific crate implementing platform-specific functionality.
-One area where this has a significant impact is in graphics rendering. 
-Different platforms suport different graphics rendering APIs so the platform crates make use of the available APIs.
+**universalui_native** implements platform-specific functionality such as windowing and events management. This contains submodules that differ depending on the platform.
+
+**universalui_graphics** provides functions and structs for rendering and processing 2D and 3D graphics. It then calls the API specific crate for rendering.
+
+**universalui_opengl** implements rendering for the OpenGL graphics API on most platforms.
+
+**universalui_metal** implements rendering for the Metal API on MacOS and iOS.
+
+**universalui_vulkan** implements rendering for the Vulkan API on Windows and other platforms (with the exception of MacOS and iOS).
 
 ### API Design
 
