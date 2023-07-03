@@ -16,13 +16,13 @@ use std::sync::mpsc::Receiver;
 use crate::geometry::*;
 use crate::string::*;
 
-use glfw::*;
+//use glfw::*;
 
 //  uWindow - a top-level application window
 pub struct uWindow {
     pub title: uString,
     pub frame: uRect,
-    pub window_handle: Option<(Window, Receiver<(f64, WindowEvent)>)>
+    pub window_handle: Option<f32>
 }
 
 //  uWindow specific functions

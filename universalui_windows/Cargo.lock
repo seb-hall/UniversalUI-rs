@@ -886,7 +886,6 @@ name = "universalui_core"
 version = "0.1.0"
 dependencies = [
  "colored",
- "glfw",
  "winit",
 ]
 

@@ -1,0 +1,13 @@
+[package]
+name = "universalui_native"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "0.9.3"
+objc2 = "0.4.0"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = "0.48.0"

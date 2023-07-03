@@ -6,7 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-universalui = { path = "../universalui" }
+#universalui = { path = "../universalui" }
+universalui_graphics = { path = "../universalui_graphics" }
+
 
 #anyhow = "1"
 #lazy_static = "1"
