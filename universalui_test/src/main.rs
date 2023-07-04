@@ -1,8 +1,6 @@
-//use universalui::{*, application::uApplication, core::string::uString, core::{window::uWindow, geometry::*}};
+use universalui::{*, application::*, core::{string::*, window::*, geometry::*}};
 
-use universalui_graphics::*;
 
-/* 
 fn finished_launch(sender: &mut uApplication) {
 
     let window1 = uWindow::init(uString::init("I am window 1"), uRect::init(0.0, 0.0, 800.0, 600.0));
@@ -11,7 +9,7 @@ fn finished_launch(sender: &mut uApplication) {
     sender.show_window(window1);
     sender.show_window(window2);
 
-}*/
+}
 
 fn will_q() {
 
@@ -19,7 +17,7 @@ fn will_q() {
 
 fn main() {
     
-    /*let app = uApplication::init_desktop(
+    let app = uApplication::init_desktop(
         "universalui test", 
         "developer", 
         0, 
@@ -27,9 +25,7 @@ fn main() {
         //uRect { x: 0.0, y: 0.0, width: 800.0, height: 600.0 },
         finished_launch,
         will_q
-    );*/
+    );
 
-    universalui_graphics::init(universalui_graphics::uGraphicsApi::Metal);
-
-    //universalui_init(app);
+    universalui_init(app);
 }

@@ -47,7 +47,7 @@ use nalgebra_glm as glm;
 use thiserror::Error;
 use vulkanalia::loader::{LibloadingLoader, LIBRARY};
 use vulkanalia::prelude::v1_0::*;
-use vulkanalia::window as vk_window;
+use  ::window as vk_window;
 use vulkanalia::Version;
 use winit::dpi::LogicalSize;
 use winit::event::{Event, WindowEvent};

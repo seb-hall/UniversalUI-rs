@@ -7,5 +7,3 @@ edition = "2021"
 
 [dependencies]
 colored = "2.0.0"
-#glfw = "0.52.0"
-winit = "0.28.6"

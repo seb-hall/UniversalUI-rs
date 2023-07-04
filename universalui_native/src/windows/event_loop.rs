@@ -1,5 +1,5 @@
-//  universalui_native crate - src/lib.rs
-//  created by sebhall on 24/06/2023
+//  universalui_native crate - src/windows/loop.rs
+//  created by sebhall on 04/07/2023
 //
 //  UniversalUI is a cross-platform application development
 //  framework. Placing high priority on efficiency and
@@ -12,19 +12,22 @@
 //  abstracted, cross platform such as windowing and file 
 //  management, without relying on external dependancies.
 //
-//  src/lib.rs contains the crate root functions and modules.
+//  src/windows/loop.rs contains the windows implementation 
+//  of the main event loop.
 
 
-//  native module, found in folder structure and structured 
-//  identically for common functionality
-#[cfg_attr(windows, path = "windows/mod.rs")]
-pub mod native;
+use windows::Win32::Foundation::*;
+use windows::Win32::UI::WindowsAndMessaging::*;
 
-pub fn native_init() -> bool {
-
-    if !native::init() {
-        return false;
+pub fn run() {
+    let mut msg = MSG::default();
+                
+    unsafe {
+        while GetMessageW(&mut msg, HWND(0), 0, 0).into() {
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+        }
     }
-
-    return true;
+    
 }
+

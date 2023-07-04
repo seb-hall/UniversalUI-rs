@@ -15,7 +15,7 @@ use colored::Colorize;
 pub fn debug_info(message: &str) {
     println!(
         "{} {}",
-        "[UUI-IFO]:".cyan(),
+        "[UUI-INFO]:".cyan(),
         message
     )
 }
@@ -25,7 +25,7 @@ pub fn debug_info(message: &str) {
 pub fn debug_warning(message: &str) {
     println!(
         "{} {}",
-        "[UUI-WNG]:".yellow(),
+        "[UUI-WARNING]:".yellow(),
         message
     )
 }
@@ -35,7 +35,7 @@ pub fn debug_warning(message: &str) {
 pub fn debug_error(message: &str) {
     println!(
         "{} {}",
-        "[UUI-ERR]:".bright_yellow(),
+        "[UUI-ERROR]:".bright_yellow(),
         message
     )
 }
@@ -44,7 +44,7 @@ pub fn debug_error(message: &str) {
 pub fn debug_critical(message: &str) {
     println!(
         "{} {}",
-        "[UUI-CRT]:".bright_red(),
+        "[UUI-CRITICAL]:".bright_red(),
         message
     )
 }

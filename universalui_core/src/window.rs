@@ -11,12 +11,8 @@
 
 #![allow(non_camel_case_types)]
 
-use std::sync::mpsc::Receiver;
-
 use crate::geometry::*;
 use crate::string::*;
-
-//use glfw::*;
 
 //  uWindow - a top-level application window
 pub struct uWindow {

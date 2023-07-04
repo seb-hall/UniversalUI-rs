@@ -13,6 +13,14 @@ pub mod core {
     pub use universalui_core::*;
 }
 
+pub mod native {
+    pub use universalui_native::*;
+}
+
+pub mod graphics {
+    pub use universalui_graphics::*;
+}
+
 pub mod application;
 
 use crate::core::debug::*;
@@ -26,10 +34,16 @@ use crate::application::*;
 //  this in the main function.
 pub fn universalui_init(mut application: uApplication) {
 
-    debug_info("Welcome to UniversalUI on Rust");
-    debug_info(&format!("Initialising '{}' v{}.{}", application.name.str(), application.major_version, application.minor_version)[..]);
-    
+    debug_info("Welcome to UniversalUI on Rust!");
+
     //  init graphics etc
+
+    if !native::native_init() {
+        return;
+    }
+
+    debug_info(&format!("Initialising '{}' v{}.{}...", application.name.str(), application.major_version, application.minor_version)[..]);
+
 
     (application.finished_launching)(&mut application);
 
