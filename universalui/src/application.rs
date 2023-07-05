@@ -13,29 +13,17 @@
 
 use universalui_core::geometry::*;
 use universalui_core::string::*;
+use universalui_core::application_type::*;
 use universalui_core::window::*;
+use universalui_core::window_delegate;
+use universalui_core::window_delegate::*;
 use universalui_core::debug::*;
 
 use universalui_native::*;
 
 use core::panic;
 
-//  uApplicationConfiguration struct, contains window information,
-//  dependent on the three different types of uApplication.
-//  SIMPLE applications contain a single, automatically created window.
-//  The preferred size of this window can be set for some platforms, 
-//  notably macOS, Windows and most Linux configurations.
-//  DESKTOP applications are recommended for desktop platforms. They can 
-//  contain any number of windows, none of which are created automatically. 
-//  Instead, an empty vector is initalised.
-//  OTHER applications are intended for tools and applets. They lack
-//  desktop features such as a menu bar.
 #[allow(dead_code)]
-enum uApplicationConfiguration {
-    simple {window: uWindow, preferred_size: uRect},
-    desktop {windows: Vec<uWindow>},
-    other {windows: Vec<uWindow>}
-}
 
 //  uApplication struct, the entry point of the framework.
 //  This should be completed with some basic information 
@@ -48,8 +36,12 @@ pub struct uApplication {
     pub major_version: i32,
     pub minor_version: i32,
 
+    //  preferred window size
+    pub preferred_window_size: uSize,
+
     //  app configuration enum
-    app_config: uApplicationConfiguration,
+    app_type: uApplicationType,
+    window_delegate: uWindowDelegate,
     
     //  handler functions
     pub finished_launching: fn(sender: &mut uApplication),
@@ -61,9 +53,11 @@ pub struct uApplication {
 impl uApplication {
 
     //  init_simple function, for initialising simple apps
-    pub fn init_simple(name: &str, developer: &str, major_version: i32, minor_version: i32, preferred_size: uRect, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
+    pub fn init_simple(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            app_config: uApplicationConfiguration::simple { window: uWindow::default(), preferred_size: preferred_size},
+            preferred_window_size: uSize { width: 100.0, height: 100.0 },
+            app_type: uApplicationType::simple,
+            window_delegate: uWindowDelegate::init(false),
             name: uString::init(name),
             developer: uString::init(developer),
             major_version: major_version,
@@ -78,7 +72,9 @@ impl uApplication {
     //  init_desktop function, for initialising desktop apps
     pub fn init_desktop(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            app_config: uApplicationConfiguration::desktop { windows: Vec::new() },
+            preferred_window_size: uSize { width: 100.0, height: 100.0 },
+            app_type: uApplicationType::desktop,
+            window_delegate: uWindowDelegate::init(true),
             name: uString::init(name),
             developer: uString::init(developer),
             major_version: major_version,
@@ -93,7 +89,9 @@ impl uApplication {
     //  init_other function, for initialising other apps
     pub fn init_other(name: &str, developer: &str, major_version: i32, minor_version: i32, finished_launching: fn(sender: &mut uApplication), will_quit: fn()) -> Self {
         let app = uApplication {
-            app_config: uApplicationConfiguration::other { windows: Vec::new() },
+            preferred_window_size: uSize { width: 100.0, height: 100.0 },
+            app_type: uApplicationType::other,
+            window_delegate: uWindowDelegate::init(true),
             name: uString::init(name),
             developer: uString::init(developer),
             major_version: major_version,
@@ -105,62 +103,54 @@ impl uApplication {
         return app;
     }
 
-    //  windows function, returns a reference to the windows vector in
-    //  desktop and other apps. Calling this function from a simple app
-    //  will cause a panic.
-    pub fn windows(&self) -> &Vec<uWindow> {
-        match &self.app_config {
-            uApplicationConfiguration::simple { .. } => {
-                debug_critical("simple appplication requested desktop windows, consider changing to a desktop appplication or using the window() function instead.");
-                panic!();
-            },
-            uApplicationConfiguration::desktop { windows } => {
-                return &windows;
-            },
-            uApplicationConfiguration::other { windows } => {
-                return &windows;
-            }
-        }
+    //  returns mutable vector of windows if application is desktop or other.
+    //  returns none if a simple application. 
+    pub fn windows(&mut self) -> Option<&mut Vec<uWindow>> {
+        return self.window_delegate.get_windows();
     }
 
-    //  window function, returns a reference to the simple app window.
-    //  Calling this function from a desktop or other app will cause
-    //  a panic.
-    pub fn window(&self) -> &uWindow {
-        match &self.app_config {
-            uApplicationConfiguration::simple { window , ..} => {
-                return &window;
+    //  window function, returns an optional mutable reference to the simple app window.
+    pub fn window(&mut self) -> Option<&mut uWindow> {
+        match self.app_type {
+            uApplicationType::simple => {
+                return self.window_delegate.get_window().unwrap().as_mut();
             },
-            uApplicationConfiguration::desktop { .. } => {
-                debug_critical("desktop appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
-                panic!();
+            uApplicationType::desktop => {
+                debug_error("desktop appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
+                return None;
             },
-            uApplicationConfiguration::other { .. } => {
-                debug_critical("other appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
-                panic!();
+            uApplicationType::other => {
+                debug_error("other appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
+                return None;
             }
         }
     }
 
     //  show_window function. This is supported for desktop and other apps.
     //  Calling this function from a simple app will do nothing.
-    pub fn show_window(&mut self, window: &mut uWindow) {
+    pub fn show_window(&mut self, mut window: uWindow) {
 
-        match &mut self.app_config {
-            uApplicationConfiguration::simple { .. } => {
+        match &self.app_type {
+            uApplicationType::simple => {
                 debug_error("simple appplication tried to add a new window, consider changing to a desktop application.");
                 return;
             },
-            uApplicationConfiguration::desktop { /*windows*/ .. } => {
+            uApplicationType::desktop => {
                 debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-                if !native::window::create_window(window) {
+                if !native::window::create_window(&mut window, &mut self.window_delegate) {
+                    debug_critical("window creation failed! Panicking!");
                     panic!();
                 }
+                self.window_delegate.add_window(window);
                 return;
             },
-            uApplicationConfiguration::other { /*windows*/ .. } => {
+            uApplicationType::other => {
                 debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-
+                if !native::window::create_window(&mut window, &mut self.window_delegate) {
+                    debug_critical("window creation failed! Panicking!");
+                    panic!();
+                }
+                self.window_delegate.add_window(window);
                 return;
             }
         }
@@ -169,30 +159,21 @@ impl uApplication {
 
     pub fn run(&mut self) {
 
-        native::event_loop::run();
+        if let uApplicationType::simple = self.app_type {
 
-        match &mut self.app_config {
-            uApplicationConfiguration::simple { /*window,*/ .. } => {
-                /*let mut newWindow = uWindow::default();
+            debug_info("creating simple application window...");
 
-                *window = newWindow;
+            let mut simple_window = uWindow::init(uString::init(self.name.str()), uSize { width: self.preferred_window_size.width, height: self.preferred_window_size.height });
 
-                */
-            },
-            uApplicationConfiguration::desktop { /*windows*/ .. } => {
-                //let mut windows_open: bool = true;
-
-                //while windows_open {
-                    //
-                //}
-
-            },
-            uApplicationConfiguration::other { windows } => {
-                while !windows.is_empty() {
-
-                }
+            if !native::window::create_window(&mut simple_window, &mut self.window_delegate) {
+                debug_critical("window creation failed! Panicking!");
+                panic!();
             }
+
+            self.window_delegate.set_single(simple_window);
         }
+
+        native::event_loop::run();
     
     }
 

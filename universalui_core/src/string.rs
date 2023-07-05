@@ -1,4 +1,4 @@
-//  universalui crate - src/string.rs
+//  universalui_core crate - src/string.rs
 //  created by sebhall on 24/06/2023
 //
 //  UniversalUI is a cross-platform application development

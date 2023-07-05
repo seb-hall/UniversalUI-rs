@@ -1,4 +1,4 @@
-//  universalui crate - src/window.rs
+//  universalui_core crate - src/window.rs
 //  created by sebhall on 24/06/2023
 //
 //  UniversalUI is a cross-platform application development
@@ -31,7 +31,8 @@ pub fn debug_warning(message: &str) {
 }
 
 
-//  error, wrong implementation and functionality affected
+//  error, wrong implementation and functionality affected.
+//  Typically used when using a function incorrectly.
 pub fn debug_error(message: &str) {
     println!(
         "{} {}",

@@ -3,11 +3,11 @@ use universalui::{*, application::*, core::{string::*, window::*, geometry::*}};
 
 fn finished_launch(sender: &mut uApplication) {
 
-    let mut window1 = uWindow::init(uString::init("I am window 1"), uRect::init(0.0, 0.0, 800.0, 600.0));
-    let mut window2 = uWindow::init(uString::init("I am window 2"), uRect::init(0.0, 0.0, 800.0, 600.0));
+    let mut window1 = uWindow::init(uString::init("I am window 1"), uSize::init(800.0, 600.0));
+    let mut window2 = uWindow::init(uString::init("I am window 2"), uSize::init(800.0, 600.0));
 
-    sender.show_window(&mut window1);
-    sender.show_window(&mut window2);
+    sender.show_window(window1);
+    sender.show_window(window2);
 
 }
 

@@ -1,4 +1,4 @@
-//  universalui_core - src/geometry.rs
+//  universalui_core crate - src/geometry.rs
 //  created by sebhall on 24/06/2023
 //
 //  universalui_core provides the base types common to all

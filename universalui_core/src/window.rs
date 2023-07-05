@@ -1,4 +1,4 @@
-//  universalui crate - src/window.rs
+//  universalui_core crate - src/window.rs
 //  created by sebhall on 24/06/2023
 //
 //  UniversalUI is a cross-platform application development
@@ -19,7 +19,7 @@ use raw_window_handle::*;
 //  uWindow - a top-level application window
 pub struct uWindow {
     pub title: uString,
-    pub frame: uRect,
+    pub size: uSize,
     pub raw_handle: Option<RawWindowHandle>
 }
 
@@ -27,9 +27,9 @@ pub struct uWindow {
 impl uWindow {
 
     //  uWindow init function, takes arguments of title, frame and handler
-    pub fn init(title: uString, frame: uRect) -> Self {
+    pub fn init(title: uString, size: uSize) -> Self {
 
-        return uWindow { title: title, frame: frame, raw_handle: None};
+        return uWindow { title: title, size: size, raw_handle: None};
     }
 
     //  uWindow show function
@@ -56,6 +56,6 @@ impl uWindow {
 
 impl Default for uWindow {
     fn default() -> Self {
-        return uWindow { title: uString::init("window"), frame: uRect::init(0.0, 0.0, 0.0, 0.0), raw_handle: None};
+        return uWindow { title: uString::init("window"), size: uSize::init(500.0, 300.0), raw_handle: None};
     }
 }

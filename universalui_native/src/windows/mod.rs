@@ -19,7 +19,6 @@ pub mod window;
 pub mod event_loop;
 
 use universalui_core::debug::*;
-use universalui_core::string::*;
 
 use windows::{core::*, s};
 use windows::Win32::Foundation::*;
@@ -47,7 +46,7 @@ pub fn init() -> bool {
                 hInstance: instance,
                 lpszClassName: window_class,
                 style: CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
-                lpfnWndProc: Some(wndproc),
+                lpfnWndProc: Some(event_loop::wndproc),
                 ..Default::default()
             };
 
@@ -96,15 +95,9 @@ pub fn init() -> bool {
         }
     };
 
-    extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT { 
-
-        println!("an event occured!");
-
-        unsafe {
-            return DefWindowProcA(window, message, wparam, lparam);
-        }
-    }
-
     return true;
 }
+
+
+
 

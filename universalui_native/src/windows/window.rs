@@ -16,6 +16,7 @@
 //  and managing top-level windows.
 
 use universalui_core::window::*;
+use universalui_core::window_delegate::*;
 use universalui_core::debug::*;
 
 use windows::{core::*, s};
@@ -27,7 +28,7 @@ use raw_window_handle::*;
 use std::ffi::c_void;
 
 //  basic init funciton from a frame and title
-pub fn create_window(window: &mut uWindow) -> bool {
+pub fn create_window(window: &mut uWindow, delegate: *mut uWindowDelegate) -> bool {
 
     fn get_instance() -> Result<HMODULE> {
         unsafe {
@@ -49,22 +50,28 @@ pub fn create_window(window: &mut uWindow) -> bool {
             WINDOW_EX_STYLE::default(),
             s!("window"),
             PCSTR(window.title.str().as_ptr()),
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+            WS_OVERLAPPEDWINDOW,
             CW_USEDEFAULT,
             CW_USEDEFAULT,
-            window.frame.width as i32,
-            window.frame.height as i32,
+            window.size.width as i32,
+            window.size.height as i32,
             None,
             None,
             instance,
             None,
         );
 
+        println!("got to here!");
+
+        SetWindowLongPtrW(win32_window, GWL_USERDATA, delegate as isize);
+
         let mut window_handle = Win32WindowHandle::empty();
         window_handle.hwnd = win32_window.0 as *mut c_void;
         window_handle.hinstance = instance.0 as *mut c_void;
 
         window.raw_handle = Some(RawWindowHandle::from(window_handle));
+
+        ShowWindow(win32_window, SW_SHOW);
 
     }
     
