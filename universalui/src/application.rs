@@ -144,7 +144,7 @@ impl uApplication {
 
     //  show_window function. This is supported for desktop and other apps.
     //  Calling this function from a simple app will do nothing.
-    pub fn show_window(&mut self, window: uWindow) {
+    pub fn show_window(&mut self, window: &mut uWindow) {
 
         match &mut self.app_config {
             uApplicationConfiguration::simple { .. } => {

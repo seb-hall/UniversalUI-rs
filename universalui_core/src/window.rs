@@ -14,11 +14,13 @@
 use crate::geometry::*;
 use crate::string::*;
 
+use raw_window_handle::*;
+
 //  uWindow - a top-level application window
 pub struct uWindow {
     pub title: uString,
     pub frame: uRect,
-    pub window_handle: Option<f32>
+    pub raw_handle: Option<RawWindowHandle>
 }
 
 //  uWindow specific functions
@@ -27,7 +29,7 @@ impl uWindow {
     //  uWindow init function, takes arguments of title, frame and handler
     pub fn init(title: uString, frame: uRect) -> Self {
 
-        return uWindow { title: title, frame: frame, window_handle: None};
+        return uWindow { title: title, frame: frame, raw_handle: None};
     }
 
     //  uWindow show function
@@ -54,6 +56,6 @@ impl uWindow {
 
 impl Default for uWindow {
     fn default() -> Self {
-        return uWindow { title: uString::init("window"), frame: uRect::init(0.0, 0.0, 0.0, 0.0), window_handle: None};
+        return uWindow { title: uString::init("window"), frame: uRect::init(0.0, 0.0, 0.0, 0.0), raw_handle: None};
     }
 }

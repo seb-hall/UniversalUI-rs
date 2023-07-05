@@ -68,6 +68,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
 
 [[package]]
+name = "raw-window-handle"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f2ff9a1f06a88b01621b7ae906ef0211290d1c8a168a15542486a8f61c0833b9"
+
+[[package]]
 name = "universalui"
 version = "0.1.0"
 dependencies = [
@@ -81,6 +87,7 @@ name = "universalui_core"
 version = "0.1.0"
 dependencies = [
  "colored",
+ "raw-window-handle",
 ]
 
 [[package]]
@@ -97,6 +104,7 @@ version = "0.1.0"
 dependencies = [
  "cfg-if",
  "core-foundation",
+ "raw-window-handle",
  "universalui_core",
  "windows",
 ]

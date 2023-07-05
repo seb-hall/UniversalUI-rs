@@ -23,8 +23,11 @@ use windows::Win32::Foundation::*;
 use windows::Win32::System::LibraryLoader::GetModuleHandleA;
 use windows::Win32::UI::WindowsAndMessaging::*;
 
+use raw_window_handle::*;
+use std::ffi::c_void;
+
 //  basic init funciton from a frame and title
-pub fn create_window(window: uWindow) -> bool {
+pub fn create_window(window: &mut uWindow) -> bool {
 
     fn get_instance() -> Result<HMODULE> {
         unsafe {
@@ -42,7 +45,7 @@ pub fn create_window(window: uWindow) -> bool {
     };
 
     unsafe {
-        let _window: HWND = CreateWindowExA(
+        let win32_window: HWND = CreateWindowExA(
             WINDOW_EX_STYLE::default(),
             s!("window"),
             PCSTR(window.title.str().as_ptr()),
@@ -56,8 +59,15 @@ pub fn create_window(window: uWindow) -> bool {
             instance,
             None,
         );
-    }
 
+        let mut window_handle = Win32WindowHandle::empty();
+        window_handle.hwnd = win32_window.0 as *mut c_void;
+        window_handle.hinstance = instance.0 as *mut c_void;
+
+        window.raw_handle = Some(RawWindowHandle::from(window_handle));
+
+    }
+    
     return true;
 
 }
