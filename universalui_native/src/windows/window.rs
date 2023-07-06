@@ -61,7 +61,9 @@ pub fn create_window(window: &mut uWindow, delegate: *mut uWindowDelegate) -> bo
             None,
         );
 
-        println!("got to here!");
+        //  IMPORTANT NOTE: multiple events such as window creation are called at this stage, 
+        //  before the delegate pointer is assigned. Calling a method on the delegate before
+        //  it's pointer has been assigned will naturally lead to a crash.
 
         SetWindowLongPtrW(win32_window, GWL_USERDATA, delegate as isize);
 
@@ -71,12 +73,37 @@ pub fn create_window(window: &mut uWindow, delegate: *mut uWindowDelegate) -> bo
 
         window.raw_handle = Some(RawWindowHandle::from(window_handle));
 
+
         ShowWindow(win32_window, SW_SHOW);
 
     }
     
     return true;
 
+}
+
+//  returns true if handles are equal, false if not
+pub fn compare_window_handles(a: &RawWindowHandle, b: &RawWindowHandle) -> bool {
+
+    if let RawWindowHandle::Win32(raw_a) = a {
+        if let RawWindowHandle::Win32(raw_b) = b {
+            if raw_a.hwnd == raw_b.hwnd {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+}
+
+//  returns an empty raw window handle
+pub fn default_window_handle() -> RawWindowHandle {
+    return RawWindowHandle::from(Win32WindowHandle::empty());
 }
 
     

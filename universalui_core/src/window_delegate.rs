@@ -53,6 +53,18 @@ impl uWindowDelegate {
 
     }
 
+    //  returns true if has a vector windows setup
+    pub fn is_multiple_windows(&self) -> bool {
+        match self.config {
+            uWindowConfiguration::single { .. } => {
+                return false;
+            },
+            _ => {
+                return true;
+            }
+        }
+    }
+
     //  Sets the single window for a simple application
     pub fn set_single(&mut self, new_window: uWindow) {
         if let uWindowConfiguration::single { ref mut window } = self.config {
@@ -102,30 +114,18 @@ impl uWindowDelegate {
     //  TODO - MOVE THIS TO NATIVE AS IT CALLS WIN32 CODE DIRECTLY
 
     //  Called when a system event occurred for the window
-    pub fn event_occurred(&mut self, handle: RawWindowHandle, event: uWindowEvent) {
+    pub fn event_occurred(&mut self, window: &mut uWindow, event: uWindowEvent) {
 
-        if let uWindowConfiguration::single { ref window } = self.config {
-            //if window.unwrap().raw_handle.unwrap() == handle {
-            //    println!("simple window event occurred!")
-            //}
-        } else if let uWindowConfiguration::multiple { ref mut windows } = self.config {
-            for window in windows {
+        match event {
+            uWindowEvent::resized { to_size }=> {
+                println!("RESIZED: {},{} '{}'", to_size.width, to_size.height, window.title.str());
+            },
+            _ => {
 
-                if let RawWindowHandle::Win32(existing_handle) = window.raw_handle.unwrap() {
-                    if let RawWindowHandle::Win32(sent_handle) = handle {
-                        if existing_handle.hwnd == sent_handle.hwnd {
-                            println!("event occurred for window {}", window.title.str());
-                        }
-                    } else {
-                        debug_error("failed to get handle from event")
-                    }
-                } else {
-                    debug_error("failed to get handle from existing window")
-                }
             }
-        } else {
-            debug_error("an event occurred for an unknown window!");
         }
+        
+        
     }
 
 }

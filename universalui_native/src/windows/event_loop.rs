@@ -15,6 +15,11 @@
 //  src/windows/loop.rs contains the windows implementation 
 //  of the main event loop.
 
+use crate::native::window::*;
+
+use universalui_core::geometry::*;
+use universalui_core::debug::*;
+use universalui_core::window::*;
 use universalui_core::window_event::*;
 use universalui_core::window_delegate::*;
 
@@ -44,6 +49,14 @@ pub unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM
 
     unsafe {
 
+        unsafe fn loword(x: u32) -> u16 {
+            (x & 0xFFFF) as u16
+        }
+
+        unsafe fn hiword(x: u32) -> u16 {
+            ((x >> 16) & 0xFFFF) as u16
+        }
+
         unsafe fn make_handle(window: HWND) -> RawWindowHandle {
             let mut window_handle = Win32WindowHandle::empty();
             window_handle.hwnd = window.0 as *mut c_void;
@@ -54,20 +67,68 @@ pub unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM
         
         unsafe fn decode_delegate(window: HWND) -> *mut uWindowDelegate {
             let delegate_ptr: *mut uWindowDelegate = GetWindowLongPtrW(window, GWL_USERDATA) as *mut uWindowDelegate;
-
             return delegate_ptr;
             
         }
 
         unsafe fn send_event(window: HWND, event: uWindowEvent) {
             let delegate = &mut *decode_delegate(window);
-            delegate.event_occurred(make_handle(window), event);
+            let window_handle = make_handle(window);
+
+            if delegate.is_multiple_windows() {
+                let delegate_ref = &mut *decode_delegate(window);
+                let windows_vec: &mut Vec<uWindow> = delegate_ref.get_windows().unwrap();
+
+                for window_ref in windows_vec {
+                    if let Some(simple_window_handle) = window_ref.raw_handle { // break if handle not defined for window
+                        if compare_window_handles(&simple_window_handle, &window_handle) { // window defined and the one the event happened to
+                            delegate.event_occurred(window_ref, event);
+                            return;
+                        }
+                    }
+                }
+
+                debug_warning("a window event occured for an unknown window!");
+
+            } else {
+                let delegate_ref = &mut *decode_delegate(window);
+                let simple_window: &mut uWindow = delegate_ref.get_window().unwrap().as_mut().unwrap();
+
+                if let Some(simple_window_handle) = simple_window.raw_handle { // break if handle not defined for window
+                    if compare_window_handles(&simple_window_handle, &window_handle) { // simple window defined and the one the event happened to
+                        delegate.event_occurred(simple_window, event);
+                    } else { // simple window defined but not the one from the event
+                        debug_warning("a window event occured for an unknown window!");
+                    }
+                }
+            }
+            
+            if let Some(has_simple_window) = delegate.get_window() { // break if not a simple window
+                if let Some(simple_window) = has_simple_window { // break if window not defined
+                    if let Some(simple_window_handle) = simple_window.raw_handle { // break if handle not defined for window
+                        if compare_window_handles(&simple_window_handle, &window_handle) { // simple window defined and the one the event happened to
+                            
+                        } else { // simple window defined but not the one from the event
+
+                        }
+                    }
+
+                    
+
+                }
+
+                
+
+                
+            }
+
         }
 
         match message {
             WM_SIZE => {
-                println!("WM_SIZE");
-                send_event(window, uWindowEvent::resized);
+                let width = loword(lparam.0 as u32);
+                let height = hiword(lparam.0 as u32);
+                send_event(window, uWindowEvent::resized{to_size: uSize::init(width as f32, height as f32)});
             },
             _ => { }
         }

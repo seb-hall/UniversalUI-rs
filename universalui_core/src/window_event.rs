@@ -11,8 +11,10 @@
 
 #![allow(non_camel_case_types)]
 
+use crate::geometry::*;
+
 pub enum uWindowEvent {
-    resized,
+    resized {to_size: uSize},
     shown,
     hidden
 }
