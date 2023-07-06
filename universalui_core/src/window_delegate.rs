@@ -22,7 +22,7 @@ use raw_window_handle::*;
 
 //  enum definining window configuration
 enum uWindowConfiguration {
-    single {window: Option<uWindow>}, // used for simple applications
+    single {window: uWindow}, // used for simple applications
     multiple {windows: Vec<uWindow>} // used for desktop and other applications
 }
 
@@ -118,7 +118,7 @@ impl uWindowDelegate {
 
         match event {
             uWindowEvent::resized { to_size }=> {
-                println!("RESIZED: {},{} '{}'", to_size.width, to_size.height, window.title.str());
+                println!("RESIZED: {},{} '{}'", to_size.width, to_size.height, window.title().str());
             },
             _ => {
 

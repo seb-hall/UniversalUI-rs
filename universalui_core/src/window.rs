@@ -11,51 +11,52 @@
 
 #![allow(non_camel_case_types)]
 
+use crate::window_controller;
+use crate::window_visibility::*;
+
+use crate::window_controller::*;
+
+
 use crate::geometry::*;
 use crate::string::*;
 
 use raw_window_handle::*;
 
+use std::rc::Rc;
+
 //  uWindow - a top-level application window
 pub struct uWindow {
-    pub title: uString,
-    pub size: uSize,
-    pub raw_handle: Option<RawWindowHandle>
+    title: uString,
+    size: uSize,
+    visibility: uWindowVisibility,
+
+    raw_handle: RawWindowHandle,  
+    controller: Rc<dyn uWindowController>
 }
 
 //  uWindow specific functions
 impl uWindow {
 
     //  uWindow init function, takes arguments of title, frame and handler
-    pub fn init(title: uString, size: uSize) -> Self {
+    pub fn init(title: uString, size: uSize, controller: Rc<dyn uWindowController>) -> Self {
 
-        return uWindow { title: title, size: size, raw_handle: None};
+        return uWindow { title: title, size: size, visibility: uWindowVisibility::visible, controller: controller, raw_handle: controller.default_window_handle()};
     }
 
-    //  uWindow show function
-    pub fn show() {
-
+    pub fn title(&self) -> &uString {
+        return &self.title;
     }
 
-    //  uWindow hide function
-    pub fn hide() {
-
+    pub fn size(&self) -> &uSize {
+        return &self.size;
     }
 
-    //  uWindow maximise function
-    pub fn maximise() {
-
+    pub fn visibility(&self) -> &uWindowVisibility {
+        return &self.visibility;
     }
 
-    //  uWindow minimise function
-    pub fn minimise() {
-
+    pub fn raw_handle(&self) -> &RawWindowHandle {
+        return &self.raw_handle;
     }
 
-}
-
-impl Default for uWindow {
-    fn default() -> Self {
-        return uWindow { title: uString::init("window"), size: uSize::init(500.0, 300.0), raw_handle: None};
-    }
 }
