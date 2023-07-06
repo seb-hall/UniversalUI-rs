@@ -25,6 +25,9 @@ use core::panic;
 
 #[allow(dead_code)]
 
+
+/* 
+
 //  uApplication struct, the entry point of the framework.
 //  This should be completed with some basic information 
 //  about your app, such as name, version etc.
@@ -103,80 +106,8 @@ impl uApplication {
         return app;
     }
 
-    //  returns mutable vector of windows if application is desktop or other.
-    //  returns none if a simple application. 
-    pub fn windows(&mut self) -> Option<&mut Vec<uWindow>> {
-        return self.window_delegate.get_windows();
-    }
-
-    //  window function, returns an optional mutable reference to the simple app window.
-    pub fn window(&mut self) -> Option<&mut uWindow> {
-        match self.app_type {
-            uApplicationType::simple => {
-                return self.window_delegate.get_window().unwrap().as_mut();
-            },
-            uApplicationType::desktop => {
-                debug_error("desktop appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
-                return None;
-            },
-            uApplicationType::other => {
-                debug_error("other appplication requested simple window, consider changing to a simple appplication or using the windows() function instead.");
-                return None;
-            }
-        }
-    }
-
-    //  show_window function. This is supported for desktop and other apps.
-    //  Calling this function from a simple app will do nothing.
-    pub fn show_window(&mut self, mut window: uWindow) {
-
-        match &self.app_type {
-            uApplicationType::simple => {
-                debug_error("simple appplication tried to add a new window, consider changing to a desktop application.");
-                return;
-            },
-            uApplicationType::desktop => {
-                debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-                if !native::window::create_window(&mut window, &mut self.window_delegate) {
-                    debug_critical("window creation failed! Panicking!");
-                    panic!();
-                }
-                self.window_delegate.add_window(window);
-                return;
-            },
-            uApplicationType::other => {
-                debug_info(&format!("application with name '{}' added a window with name '{}'", self.name.str(), window.title.str())[..]);
-                if !native::window::create_window(&mut window, &mut self.window_delegate) {
-                    debug_critical("window creation failed! Panicking!");
-                    panic!();
-                }
-                self.window_delegate.add_window(window);
-                return;
-            }
-        }
-        
-    }
-
-    pub fn run(&mut self) {
-
-        if let uApplicationType::simple = self.app_type {
-
-            debug_info("creating simple application window...");
-
-            let mut simple_window = uWindow::init(uString::init(self.name.str()), uSize { width: self.preferred_window_size.width, height: self.preferred_window_size.height });
-
-            if !native::window::create_window(&mut simple_window, &mut self.window_delegate) {
-                debug_critical("window creation failed! Panicking!");
-                panic!();
-            }
-
-            self.window_delegate.set_single(simple_window);
-        }
-
-        native::event_loop::run();
     
-    }
 
 
 
-}
+}*/

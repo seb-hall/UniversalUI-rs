@@ -20,8 +20,8 @@ use crate::native::window::*;
 use universalui_core::geometry::*;
 use universalui_core::debug::*;
 use universalui_core::window::*;
-use universalui_core::window_event::*;
-use universalui_core::window_delegate::*;
+//use universalui_core::window_event::*;
+//use universalui_core::window_delegate::*;
 
 use windows::Win32::Foundation::*;
 use windows::Win32::UI::WindowsAndMessaging::*;
@@ -46,9 +46,9 @@ pub fn run() {
 pub unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT { 
 
     //println!("an event occured! {}", message);
-
+    
     unsafe {
-
+        /* 
         unsafe fn loword(x: u32) -> u16 {
             (x & 0xFFFF) as u16
         }
@@ -131,7 +131,7 @@ pub unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM
                 send_event(window, uWindowEvent::resized{to_size: uSize::init(width as f32, height as f32)});
             },
             _ => { }
-        }
+        }*/
         return DefWindowProcA(window, message, wparam, lparam);
     }
 }

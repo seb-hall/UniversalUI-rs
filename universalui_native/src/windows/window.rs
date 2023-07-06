@@ -16,7 +16,7 @@
 //  and managing top-level windows.
 
 use universalui_core::window::*;
-use universalui_core::window_delegate::*;
+//use universalui_core::window_delegate::*;
 use universalui_core::debug::*;
 
 use windows::{core::*, s};
@@ -26,6 +26,8 @@ use windows::Win32::UI::WindowsAndMessaging::*;
 
 use raw_window_handle::*;
 use std::ffi::c_void;
+
+/* 
 
 //  basic init funciton from a frame and title
 pub fn create_window(window: &mut uWindow, delegate: *mut uWindowDelegate) -> bool {
@@ -109,3 +111,4 @@ pub fn default_window_handle() -> RawWindowHandle {
     
 
     
+*/

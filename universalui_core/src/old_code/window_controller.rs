@@ -13,28 +13,29 @@
 
 #![allow(non_camel_case_types)]
 
-use raw_window_handle::RawWindowHandle;
-
-use crate::string::*;
-use crate::geometry::*;
 use crate::window::*;
-use crate::window_visibility::*;
 
 pub trait uWindowController {
 
+    //  window resized event
+    fn window_resized(&self, window: &mut uWindow);
+
+    //  window created event
+    fn window_created(&self, window: &mut uWindow);
+
     //  create window and update window handle
-    fn create_window(&self, window: &mut uWindow);
+    //fn create_window(&self, window: &mut uWindow);
     //  set window handle
-    fn set_window_handle(&self, window: &mut uWindow);
+    //fn set_window_handle(&self, window: &mut uWindow);
 
     //  show/hide window
-    fn set_window_visibility(&self, window: &mut uWindow, visibility: uWindowVisibility);
+    //fn set_window_visibility(&self, window: &mut uWindow, visibility: uWindowVisibility);
     //  set window title
-    fn set_window_title(&self, window: &mut uWindow, title: uString);
+    //fn set_window_title(&self, window: &mut uWindow, title: uString);
     //  set window size
-    fn set_window_size(&self, window: &mut uWindow, size: uSize);
+    //fn set_window_size(&self, window: &mut uWindow, size: uSize);
 
-    fn default_window_handle(&self, ) -> RawWindowHandle;
+    //fn default_window_handle(&self, ) -> RawWindowHandle;
 
 
 }

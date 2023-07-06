@@ -14,15 +14,31 @@
 use std::sync::Arc;
 use std::vec::Vec;
 
-
 pub trait uView {
     fn init(&self);
     fn draw(&self);
     fn add_subview(&self);
-    fn subviews(&self) -> Vec<Arc<dyn uView>>;
+    fn subviews(&self);// -> Vec<dyn uView> not allowed
 }
 
-pub struct uViewHandler {
-    pub root_view: Arc<dyn uView>,
-    pub view_did_load: fn(),
+pub struct uTestView {
+
 }
+
+impl uView for uTestView {
+
+    fn init(&self) {
+
+    }
+    fn draw(&self) {
+
+    }
+    fn add_subview(&self) {
+
+    }
+    fn subviews(&self) /*-> Vec<dyn uView> not allowed*/ {
+
+    }
+
+}
+
