@@ -18,6 +18,7 @@
 use universalui_core::window::*;
 //use universalui_core::window_delegate::*;
 use universalui_core::debug::*;
+use universalui_core::window_provider::*;
 
 use windows::{core::*, s};
 use windows::Win32::Foundation::*;
@@ -27,61 +28,61 @@ use windows::Win32::UI::WindowsAndMessaging::*;
 use raw_window_handle::*;
 use std::ffi::c_void;
 
-/* 
 
-//  basic init funciton from a frame and title
-pub fn create_window(window: &mut uWindow, delegate: *mut uWindowDelegate) -> bool {
+pub struct NativeWindowProvider {
 
-    fn get_instance() -> Result<HMODULE> {
-        unsafe {
-            let instance = GetModuleHandleA(None)?;
-            return Ok(instance);
+}
+
+impl uWindowProvider for NativeWindowProvider {
+    //  create window and update window handle
+    fn create_window(&self, window: &uWindow) -> uWindowHandle {
+        fn get_instance() -> Result<HMODULE> {
+            unsafe {
+                let instance = GetModuleHandleA(None)?;
+                return Ok(instance);
+            }
         }
-    }
-
-    let instance = match get_instance() {
-        Ok(inst) => inst,
-        Err(_) => {
-            debug_critical("couldn't get instance handle!"); 
-            return false; 
-        }
-    };
-
-    unsafe {
-        let win32_window: HWND = CreateWindowExA(
-            WINDOW_EX_STYLE::default(),
-            s!("window"),
-            PCSTR(window.title.str().as_ptr()),
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            window.size.width as i32,
-            window.size.height as i32,
-            None,
-            None,
-            instance,
-            None,
-        );
-
-        //  IMPORTANT NOTE: multiple events such as window creation are called at this stage, 
-        //  before the delegate pointer is assigned. Calling a method on the delegate before
-        //  it's pointer has been assigned will naturally lead to a crash.
-
-        SetWindowLongPtrW(win32_window, GWL_USERDATA, delegate as isize);
-
-        let mut window_handle = Win32WindowHandle::empty();
-        window_handle.hwnd = win32_window.0 as *mut c_void;
-        window_handle.hinstance = instance.0 as *mut c_void;
-
-        window.raw_handle = Some(RawWindowHandle::from(window_handle));
-
-
-        ShowWindow(win32_window, SW_SHOW);
-
-    }
     
-    return true;
+        let instance: Option<HMODULE> = match get_instance() {
+            Ok(inst) => Some(inst),
+            Err(_) => {
+                debug_critical("couldn't get instance handle!"); 
+                None
+            }
+        };
+    
+        unsafe {
+            let win32_window: HWND = CreateWindowExA(
+                WINDOW_EX_STYLE::default(),
+                s!("window"),
+                PCSTR(window.title.str().as_ptr()),
+                WS_OVERLAPPEDWINDOW,
+                CW_USEDEFAULT,
+                CW_USEDEFAULT,
+                window.size.width as i32,
+                window.size.height as i32,
+                None,
+                None,
+                instance.unwrap(),
+                None,
+            );
+    
+            //  IMPORTANT NOTE: multiple events such as window creation are called at this stage, 
+            //  before the delegate pointer is assigned. Calling a method on the delegate before
+            //  it's pointer has been assigned will naturally lead to a crash.
+    
+            //SetWindowLongPtrW(win32_window, GWL_USERDATA, delegate as isize);
+    
+            let mut window_handle = Win32WindowHandle::empty();
+            window_handle.hwnd = win32_window.0 as *mut c_void;
+            window_handle.hinstance = instance.unwrap().0 as *mut c_void;
+    
+            ShowWindow(win32_window, SW_SHOW);
 
+            return uWindowHandle{ raw_handle: Some(RawWindowHandle::from(window_handle))};
+    
+        }
+    }
 }
 
 //  returns true if handles are equal, false if not
@@ -110,5 +111,3 @@ pub fn default_window_handle() -> RawWindowHandle {
 
     
 
-    
-*/

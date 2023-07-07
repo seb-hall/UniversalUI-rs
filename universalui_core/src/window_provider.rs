@@ -19,5 +19,5 @@ use crate::window::*;
 pub trait uWindowProvider {
 
     //  create window and update window handle
-    //fn create_window(&self, window: &mut dyn uWindow);
+    fn create_window(&self, window: &uWindow) -> uWindowHandle;
 }

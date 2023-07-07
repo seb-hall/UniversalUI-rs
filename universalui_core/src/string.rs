@@ -12,7 +12,7 @@
 #![allow(non_camel_case_types)]
 
 pub struct uString {
-    pub raw: String,
+    raw: String,
 }
 
 impl uString {

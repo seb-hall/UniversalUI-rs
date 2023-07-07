@@ -1,37 +1,22 @@
-use universalui::{*, application_window::*, core::{string::*, window::*, geometry::*, view::*, application::*}};
+use universalui::{*, core::{string::*, window::*, geometry::*, view::*, application::*, debug::*}};
 
 
-fn finished_launch(sender: &mut uApplication) {
+fn finished_launch(app: &mut uDesktopApplication) {
 
-    /*let mut window = uApplicationWindow{
-        title: uString::init("test window"),
-        size: uSize::init(800.0, 600.0),
-        root: uTestView { }
-    };
+    println!("hi from test finished launch!");
 
-    
-    //let mut window1 = uWindow::init(uString::init("Test Window 1"), uSize::init(800.0, 600.0));
-    //let mut window2 = uWindow::init(uString::init("Test Window 2"), uSize::init(800.0, 600.0));
+    let myWindow = uWindow::init("I am window", uSize::init(800.0, 600.0));
+    app.add_window(myWindow);
 
-    sender.show_window(window1);
-    sender.show_window(window2);
-    */
+    let myWindow2 = uWindow::init("I am window 2", uSize::init(800.0, 600.0));
+    app.add_window(myWindow2);
 }
 
-fn will_q() {
-
-}
 
 fn main() {
 
-    let app = uApplication {
-        name: uString::init("my app"),
-        developer: uString::init("me"),
-        major_version: 0,
-        minor_version: 1,
-        finished_launching: will_q,
-        will_quit: will_q
-    };
+    let mut app = uDesktopApplication::init( "my app", "me", 0, 1 );
+    app.set_finished_launching_callback(finished_launch);
 
-    universalui_init(app);
+    universalui_init(&mut app);
 }

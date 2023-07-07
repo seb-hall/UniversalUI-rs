@@ -20,6 +20,8 @@
 #[cfg_attr(windows, path = "windows/mod.rs")]
 pub mod native;
 
+use universalui_core::window_provider::*;
+
 pub fn native_init() -> bool {
 
     if !native::init() {
@@ -27,4 +29,8 @@ pub fn native_init() -> bool {
     }
 
     return true;
+}
+
+pub fn native_window_provider() -> Box<dyn uWindowProvider> {
+    return Box::new(native::window::NativeWindowProvider{ });
 }

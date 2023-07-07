@@ -15,6 +15,12 @@ use crate::string::*;
 use crate::geometry::*;
 use crate::view::*;
 
+use raw_window_handle::*;
+
+pub struct uWindowHandle {
+    pub raw_handle: Option<RawWindowHandle>
+}
+
 //  the base 'window' trait
 pub struct uWindow {
 
@@ -24,7 +30,16 @@ pub struct uWindow {
     //  returns a reference to the size of the window
     pub size: uSize,
 
+    //  window handle, for windowing system
+    pub handle: uWindowHandle
+
     //  returns a reference to the 
     //pub root: dyn uView;
 
+} 
+
+impl uWindow {
+    pub fn init(title: &str, size: uSize) -> Self {
+        return uWindow { title: uString::init(title), size: size, handle: uWindowHandle { raw_handle: None }};
+    }
 }

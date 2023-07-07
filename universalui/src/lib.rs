@@ -13,16 +13,13 @@ pub mod core {
     pub use universalui_core::*;
 }
 
-//pub mod native {
-//    pub use universalui_native::*;
-//}
+pub mod native {   
+    pub use universalui_native::*;
+}
 
 pub mod graphics {
     pub use universalui_graphics::*;
 }
-
-//pub mod application;
-pub mod application_window;
 
 use crate::core::debug::*;
 use universalui_core::application::*;
@@ -33,20 +30,25 @@ use universalui_core::application::*;
 //  in undefined behavior. This function will only return when the 
 //  application has been quit, and so no code should be run after
 //  this in the main function.
-pub fn universalui_init(application: uApplication) {
+pub fn universalui_init(application: &mut dyn uApplication) {
 
     debug_info("Welcome to UniversalUI on Rust!");
 
     //  init graphics etc
 
-    //if !native::native_init() {
-    //    return;
-    //}
+    if !native::native_init() {
+        return;
+    }
 
-    debug_info(&format!("Initialising '{}' v{}.{}...", application.name.str(), application.major_version, application.minor_version)[..]);
+    application.set_window_provider(native::native_window_provider());
 
+    //debug_info(&format!("Initialising '{}' v{}.{}...", application.name.str(), application.major_version, application.minor_version)[..]);
 
-    //(application.finished_launching)(&mut application);
+   application.finished_launching();
+
+   while {true} {
+    
+   }
 
     //application.run();
 
