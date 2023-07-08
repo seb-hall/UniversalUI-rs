@@ -18,6 +18,12 @@ use crate::window::*;
 //  It also owns the window objects directly.
 pub trait uWindowProvider {
 
+    //  initialise window provider, return true if successful
+    fn init(&self) -> bool;
+
     //  create window and update window handle
     fn create_window(&self, window: &uWindow) -> uWindowHandle;
+
+    //  run event loop
+    fn run_event_loop(&self);
 }

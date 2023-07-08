@@ -21,8 +21,10 @@ pub mod graphics {
     pub use universalui_graphics::*;
 }
 
+use std::rc::Rc;
+
 use crate::core::debug::*;
-use universalui_core::application::*;
+use universalui_core::{application::*, window};
 
 //  universalui_init function, this takes a mutable reference
 //  to an instance of uApplication and runs the main application
@@ -36,21 +38,20 @@ pub fn universalui_init(application: &mut dyn uApplication) {
 
     //  init graphics etc
 
-    if !native::native_init() {
+    let window_provider = native::native_window_provider();
+
+    if !window_provider.init() {
         return;
     }
 
-    application.set_window_provider(native::native_window_provider());
+    let window_provider_reference = Rc::new(window_provider);
+    application.set_window_provider(window_provider_reference.clone());
 
-    //debug_info(&format!("Initialising '{}' v{}.{}...", application.name.str(), application.major_version, application.minor_version)[..]);
+    debug_info(&format!("Initialising '{}' v{}.{}...", application.info().name.str(), application.info().major_version, application.info().minor_version)[..]);
 
-   application.finished_launching();
+    application.finished_launching();
 
-   while {true} {
-    
-   }
-
-    //application.run();
+    window_provider_reference.run_event_loop();
 
     debug_info("application completed with no issues");
 

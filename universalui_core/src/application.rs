@@ -5,6 +5,8 @@ use crate::geometry::*;
 use crate::window::*;
 use crate::window_provider::*;
 
+use std::rc::Rc;
+
 pub struct uApplicationInformation {
     pub name: uString,
     pub developer: uString,
@@ -13,7 +15,7 @@ pub struct uApplicationInformation {
 }
 
 pub trait uApplication {
-    fn set_window_provider(&mut self, provider: Box<dyn uWindowProvider>);
+    fn set_window_provider(&mut self, provider:  Rc<Box<dyn uWindowProvider>>);
     fn info(&self) -> uApplicationInformation;
     fn finished_launching(&mut self);
 }
@@ -25,7 +27,7 @@ pub struct uDesktopApplication {
     major_version: i32,
     minor_version: i32,
     
-    window_provider: Option<Box<dyn uWindowProvider>>,
+    window_provider: Option<Rc<Box<dyn uWindowProvider>>>,
     windows: Vec<uWindow>,
 
     finished_launching_callback: fn(app: &mut uDesktopApplication),
@@ -55,14 +57,14 @@ impl uDesktopApplication {
         self.finished_launching_callback = function;
     }
     
-    fn default_finished_launching_callback(app: &mut uDesktopApplication) { 
+    fn default_finished_launching_callback(_app: &mut uDesktopApplication) { 
 
     }
 }
 
 impl uApplication for uDesktopApplication {
 
-    fn set_window_provider(&mut self, provider: Box<dyn uWindowProvider>) {
+    fn set_window_provider(&mut self, provider: Rc<Box<dyn uWindowProvider>>) {
         self.window_provider = Some(provider);
     }
 

@@ -22,15 +22,6 @@ pub mod native;
 
 use universalui_core::window_provider::*;
 
-pub fn native_init() -> bool {
-
-    if !native::init() {
-        return false;
-    }
-
-    return true;
-}
-
 pub fn native_window_provider() -> Box<dyn uWindowProvider> {
-    return Box::new(native::window::NativeWindowProvider{ });
+    return Box::new(native::uNativeWindowProvider{ });
 }
