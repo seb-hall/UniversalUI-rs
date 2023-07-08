@@ -38,7 +38,7 @@ pub fn universalui_init(application: &mut dyn uApplication) {
 
     //  init graphics etc
 
-    let window_provider = native::native_window_provider();
+    let mut window_provider = native::native_window_provider();
 
     if !window_provider.init() {
         return;

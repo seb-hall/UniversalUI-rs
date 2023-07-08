@@ -29,7 +29,7 @@ use raw_window_handle::*;
 use std::ffi::c_void;
 
 //  create window and update window handle
-pub fn create_window(window: &uWindow) -> uWindowHandle {
+pub fn create_window(window: &uWindow, provider: isize) -> uWindowHandle {
     fn get_instance() -> Result<HMODULE> {
         unsafe {
             let instance = GetModuleHandleA(None)?;
@@ -65,7 +65,7 @@ pub fn create_window(window: &uWindow) -> uWindowHandle {
         //  before the delegate pointer is assigned. Calling a method on the delegate before
         //  it's pointer has been assigned will naturally lead to a crash.
 
-        //SetWindowLongPtrW(win32_window, GWL_USERDATA, delegate as isize);
+        SetWindowLongPtrW(win32_window, GWL_USERDATA, provider);
 
         let mut window_handle = Win32WindowHandle::empty();
         window_handle.hwnd = win32_window.0 as *mut c_void;

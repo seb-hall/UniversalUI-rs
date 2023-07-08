@@ -18,6 +18,7 @@ pub trait uApplication {
     fn set_window_provider(&mut self, provider:  Rc<Box<dyn uWindowProvider>>);
     fn info(&self) -> uApplicationInformation;
     fn finished_launching(&mut self);
+    fn window_resized(&self, window: uWindow);
 }
 
 
@@ -49,7 +50,8 @@ impl uDesktopApplication {
     
 
     pub fn add_window(&mut self, mut window: uWindow) {
-        window.handle = self.window_provider.as_ref().unwrap().create_window(&window);
+        let provider = self.window_provider.as_ref().unwrap();
+        window.handle = provider.create_window(&window);
         self.windows.push(window);
     }
 
@@ -79,5 +81,9 @@ impl uApplication for uDesktopApplication {
             major_version: self.major_version.clone(),
             minor_version: self.minor_version.clone()
         }
+    }
+
+    fn window_resized(&self, window: uWindow) {
+        
     }
 }

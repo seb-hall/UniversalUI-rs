@@ -19,7 +19,7 @@ use crate::window::*;
 pub trait uWindowProvider {
 
     //  initialise window provider, return true if successful
-    fn init(&self) -> bool;
+    fn init(&mut self) -> bool;
 
     //  create window and update window handle
     fn create_window(&self, window: &uWindow) -> uWindowHandle;

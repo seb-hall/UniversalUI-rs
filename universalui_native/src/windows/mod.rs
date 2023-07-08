@@ -18,7 +18,6 @@
 #![allow(non_camel_case_types)]
 
 pub mod window;
-pub mod event_loop;
 
 use universalui_core::debug::*;
 
@@ -32,21 +31,31 @@ use windows::Win32::Foundation::*;
 use windows::Win32::System::LibraryLoader::GetModuleHandleA;
 use windows::Win32::UI::WindowsAndMessaging::*;
 
-pub struct uNativeWindowProvider {
+use raw_window_handle::*;
+use std::os::raw::c_void;
 
+pub struct uNativeWindowProvider {
+    pub raw_ptr: Option<isize>
 }
 
 impl uWindowProvider for uNativeWindowProvider {
     fn create_window(&self, window: &uWindow) -> uWindowHandle { 
-        return window::create_window(window);
+        return window::create_window(window, self.raw_ptr.unwrap());
     }
 
     fn run_event_loop(&self) {
-        return event_loop::run();
+        let mut msg = MSG::default();
+                    
+        unsafe {
+            while GetMessageW(&mut msg, HWND(0), 0, 0).into() {
+                TranslateMessage(&msg);
+                DispatchMessageW(&msg);
+            }
+        }
     }
 
     //  init function, register window class
-    fn init(&self) -> bool {
+    fn init(&mut self) -> bool {
 
         debug_info("Initialising UniversalUI for Windows...");
 
@@ -66,7 +75,7 @@ impl uWindowProvider for uNativeWindowProvider {
                     hInstance: instance,
                     lpszClassName: window_class,
                     style: CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
-                    lpfnWndProc: Some(event_loop::wndproc),
+                    lpfnWndProc: Some(wndproc),
                     ..Default::default()
                 };
 
@@ -115,9 +124,53 @@ impl uWindowProvider for uNativeWindowProvider {
             }
         };
 
+        let raw: *mut uNativeWindowProvider = self;
+        self.raw_ptr = Some(raw as isize);
+
         return true;
     }
+      
+}
+
+unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT { 
+
+    //println!("an event occured! {}", message);
+    
+    unsafe {
+        
+        unsafe fn loword(x: u32) -> u16 {
+            (x & 0xFFFF) as u16
+        }
+
+        unsafe fn hiword(x: u32) -> u16 {
+            ((x >> 16) & 0xFFFF) as u16
+        }
+
+        unsafe fn make_handle(window: HWND) -> RawWindowHandle {
+            let mut window_handle = Win32WindowHandle::empty();
+            window_handle.hwnd = window.0 as *mut c_void;
+            window_handle.hinstance = GetWindowLongA(window, GWL_HINSTANCE) as *mut c_void;
+
+            return RawWindowHandle::from(window_handle);
+        }
+        
+        unsafe fn decode_provider(window: HWND) -> *mut uNativeWindowProvider {
+            let provider_ptr: *mut uNativeWindowProvider = GetWindowLongPtrW(window, GWL_USERDATA) as *mut uNativeWindowProvider;
+            return provider_ptr;
+        }
+
+
+        match message {
+            WM_SIZE => {
+                let width = loword(lparam.0 as u32);
+                let height = hiword(lparam.0 as u32);
+                debug_info(&format!("Window Resized: {} {}", width as f32, height as f32)[..]);
+            },
+            _ => { }
+        }
+        return DefWindowProcA(window, message, wparam, lparam);
     }
+}
 
 
 
