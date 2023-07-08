@@ -54,6 +54,11 @@ impl uWindowProvider for uNativeWindowProvider {
         }
     }
 
+    //  set window title
+    fn set_window_title(&self, window: &mut uWindow, title: uString) {
+
+    }
+
     //  init function, register window class
     fn init(&mut self) -> bool {
 

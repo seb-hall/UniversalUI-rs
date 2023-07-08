@@ -9,6 +9,7 @@ pub mod string;
 
 pub mod window;
 pub mod window_provider;
+pub mod window_controller;
 
 pub mod view;
 

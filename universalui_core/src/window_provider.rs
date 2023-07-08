@@ -12,6 +12,8 @@
 #![allow(non_camel_case_types)]
 
 use crate::window::*;
+use crate::string::*;
+use crate::window_controller::uWindowController;
 
 //  uWindowProvider is implemented by the platform in order to
 //  create windows and to enable core functionality such as rendering.
@@ -23,6 +25,11 @@ pub trait uWindowProvider {
 
     //  create window and update window handle
     fn create_window(&self, window: &uWindow) -> uWindowHandle;
+
+    //  set window title
+    fn set_window_title(&self, window: &mut uWindow, title: uString);
+
+    fn set_window_controller(&self, window: &mut uWindow, controller: &dyn uWindowController);
 
     //  run event loop
     fn run_event_loop(&self);

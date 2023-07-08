@@ -6,6 +6,7 @@ use crate::window::*;
 use crate::window_provider::*;
 
 use std::rc::Rc;
+use std::cell::RefCell;
 
 pub struct uApplicationInformation {
     pub name: uString,
@@ -31,7 +32,7 @@ pub struct uDesktopApplication {
     window_provider: Option<Rc<Box<dyn uWindowProvider>>>,
     windows: Vec<uWindow>,
 
-    finished_launching_callback: fn(app: &mut uDesktopApplication),
+    finished_launching_callback: fn(app: &mut uDesktopApplication)
 }
 
 impl uDesktopApplication {
@@ -51,7 +52,7 @@ impl uDesktopApplication {
 
     pub fn add_window(&mut self, mut window: uWindow) {
         let provider = self.window_provider.as_ref().unwrap();
-        window.handle = provider.create_window(&window);
+        window.set_handle(provider.create_window(&window));
         self.windows.push(window);
     }
 

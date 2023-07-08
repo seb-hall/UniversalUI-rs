@@ -14,7 +14,9 @@
 use crate::string::*;
 use crate::geometry::*;
 use crate::view::*;
+use crate::window_controller::uWindowController;
 
+use std::rc::Rc;
 use raw_window_handle::*;
 
 pub struct uWindowHandle {
@@ -31,7 +33,10 @@ pub struct uWindow {
     pub size: uSize,
 
     //  window handle, for windowing system
-    pub handle: uWindowHandle
+    handle: uWindowHandle,
+
+    //
+    controller: Option<Rc<dyn uWindowController>>
 
     //  returns a reference to the 
     //pub root: dyn uView;
@@ -40,6 +45,14 @@ pub struct uWindow {
 
 impl uWindow {
     pub fn init(title: &str, size: uSize) -> Self {
-        return uWindow { title: uString::init(title), size: size, handle: uWindowHandle { raw_handle: None }};
+        return uWindow { title: uString::init(title), size: size, handle: uWindowHandle { raw_handle: None }, controller: None};
+    }
+
+    pub fn set_handle(&mut self, handle: uWindowHandle) {
+        self.handle = handle;
+    }
+
+    pub fn set_window_controller(&mut self, controller: Rc<dyn uWindowController>) {
+        controller = Some(controller);
     }
 }
