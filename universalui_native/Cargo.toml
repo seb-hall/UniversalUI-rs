@@ -7,6 +7,7 @@ edition = "2021"
 cfg-if = "1.0.0"
 raw-window-handle = "0.5.2"
 universalui_core = { path = "../universalui_core" }
+universalui_graphics = { path = "../universalui_graphics" }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 core-foundation = "0.9.3"

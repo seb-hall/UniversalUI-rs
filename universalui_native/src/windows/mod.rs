@@ -24,7 +24,11 @@ use universalui_core::debug::*;
 use universalui_core::{
     window::*,
     window_provider::*,
+    string::*,
+    window_controller::*,
 };
+
+use universalui_graphics::*;
 
 use windows::{core::*, s};
 use windows::Win32::Foundation::*;
@@ -35,12 +39,14 @@ use raw_window_handle::*;
 use std::os::raw::c_void;
 
 pub struct uNativeWindowProvider {
-    pub raw_ptr: Option<isize>
+    pub raw_ptr: Option<isize>,
+    pub graphics_provider: uGraphicsProvider
 }
 
 impl uWindowProvider for uNativeWindowProvider {
     fn create_window(&self, window: &uWindow) -> uWindowHandle { 
-        return window::create_window(window, self.raw_ptr.unwrap());
+        let handle = window::create_window(window, self.raw_ptr.unwrap(), &self.graphics_provider);
+        return handle;
     }
 
     fn run_event_loop(&self) {
@@ -52,6 +58,10 @@ impl uWindowProvider for uNativeWindowProvider {
                 DispatchMessageW(&msg);
             }
         }
+    }
+
+    fn set_window_controller(&self, window: &mut uWindow, controller: &dyn uWindowController) {
+
     }
 
     //  set window title

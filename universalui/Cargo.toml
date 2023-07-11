@@ -8,4 +8,3 @@ edition = "2021"
 [dependencies]
 universalui_core = { path = "../universalui_core" }
 universalui_native = { path = "../universalui_native" }
-universalui_graphics = { path = "../universalui_graphics" }

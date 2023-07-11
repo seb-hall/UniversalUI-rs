@@ -20,6 +20,8 @@ use universalui_core::window::*;
 use universalui_core::debug::*;
 use universalui_core::window_provider::*;
 
+use universalui_graphics::*;
+
 use windows::{core::*, s};
 use windows::Win32::Foundation::*;
 use windows::Win32::System::LibraryLoader::GetModuleHandleA;
@@ -29,7 +31,7 @@ use raw_window_handle::*;
 use std::ffi::c_void;
 
 //  create window and update window handle
-pub fn create_window(window: &uWindow, provider: isize) -> uWindowHandle {
+pub fn create_window(window: &uWindow, provider: isize, graphics_provider: &uGraphicsProvider) -> uWindowHandle {
     fn get_instance() -> Result<HMODULE> {
         unsafe {
             let instance = GetModuleHandleA(None)?;
@@ -71,9 +73,13 @@ pub fn create_window(window: &uWindow, provider: isize) -> uWindowHandle {
         window_handle.hwnd = win32_window.0 as *mut c_void;
         window_handle.hinstance = instance.unwrap().0 as *mut c_void;
 
+        let handle = uWindowHandle{ raw_handle: Some(RawWindowHandle::from(window_handle)), raw_display_handle: Some(RawDisplayHandle::from(WindowsDisplayHandle::empty()))};
+        
+        graphics_provider.setup_for_window(&handle);
+  
         ShowWindow(win32_window, SW_SHOW);
 
-        return uWindowHandle{ raw_handle: Some(RawWindowHandle::from(window_handle))};
+        return handle;
 
     }
 }

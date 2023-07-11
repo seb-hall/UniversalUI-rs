@@ -20,7 +20,20 @@ use std::rc::Rc;
 use raw_window_handle::*;
 
 pub struct uWindowHandle {
-    pub raw_handle: Option<RawWindowHandle>
+    pub raw_handle: Option<RawWindowHandle>,
+    pub raw_display_handle: Option<RawDisplayHandle>
+}
+
+unsafe impl HasRawWindowHandle for uWindowHandle {
+    fn raw_window_handle(&self) -> raw_window_handle::RawWindowHandle {
+        return self.raw_handle.unwrap();
+    }
+}
+
+unsafe impl HasRawDisplayHandle for uWindowHandle {
+    fn raw_display_handle(&self) -> RawDisplayHandle {
+        return self.raw_display_handle.unwrap();
+    }
 }
 
 //  the base 'window' trait
@@ -45,14 +58,18 @@ pub struct uWindow {
 
 impl uWindow {
     pub fn init(title: &str, size: uSize) -> Self {
-        return uWindow { title: uString::init(title), size: size, handle: uWindowHandle { raw_handle: None }, controller: None};
+        return uWindow { title: uString::init(title), size: size, handle: uWindowHandle { raw_handle: None, raw_display_handle: None }, controller: None};
     }
 
     pub fn set_handle(&mut self, handle: uWindowHandle) {
         self.handle = handle;
     }
 
+    pub fn get_handle(&self) -> &uWindowHandle {
+        return &self.handle;
+    }
+
     pub fn set_window_controller(&mut self, controller: Rc<dyn uWindowController>) {
-        controller = Some(controller);
+        //controller = Some(controller);
     }
 }

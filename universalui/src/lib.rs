@@ -17,9 +17,6 @@ pub mod native {
     pub use universalui_native::*;
 }
 
-pub mod graphics {
-    pub use universalui_graphics::*;
-}
 
 use std::rc::Rc;
 
@@ -43,6 +40,8 @@ pub fn universalui_init(application: &mut dyn uApplication) {
     if !window_provider.init() {
         return;
     }
+
+    
 
     let window_provider_reference = Rc::new(window_provider);
     application.set_window_provider(window_provider_reference.clone());
