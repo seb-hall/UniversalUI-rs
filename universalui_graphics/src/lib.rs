@@ -3,6 +3,10 @@
 pub mod surface;
 pub mod text;
 
+use std::collections::HashMap;
+
+use raw_window_handle::*;
+
 use universalui_core::{
     debug::*,
     window::*
@@ -10,9 +14,13 @@ use universalui_core::{
 
 use wgpu::*;
 
+pub struct uGraphicsWindow {
+
+}
+
 pub struct uGraphicsProvider {
     instance: Instance,
-
+    window_map: HashMap<RawWindowHandle, uGraphicsWindow>
 }
 
 impl uGraphicsProvider {
@@ -28,12 +36,13 @@ impl uGraphicsProvider {
         });
 
         return uGraphicsProvider {
-            instance
+            instance: instance,
+            window_map: HashMap::new()
         };
 
     }
 
-    pub fn setup_for_window(&self, handle: &uWindowHandle) -> bool {
+    pub fn setup_for_window(&self, window: &uWindow, handle: &uWindowHandle) -> bool {
 
         let surface = match unsafe { self.instance.create_surface(&handle) } {
             Ok(surface) => {debug_info("surface ok"); surface}
@@ -45,34 +54,57 @@ impl uGraphicsProvider {
 
         debug_info("got surface");
 
+        let adapter: Adapter = pollster::block_on( 
+            async { 
+                self.instance.request_adapter(
+                    &wgpu::RequestAdapterOptions {
+                        power_preference: wgpu::PowerPreference::default(),
+                        compatible_surface: Some(&surface),
+                        force_fallback_adapter: false,
+                    },
+                ).await.unwrap() 
+            } 
+        );
+
+        let (device, queue): (Device, Queue) = pollster::block_on(
+            async { 
+                adapter.request_device(
+                    &wgpu::DeviceDescriptor {
+                        features: wgpu::Features::empty(),
+                        limits: wgpu::Limits::default(),
+                        label: None,
+                    },
+                    None, // Trace path
+                ).await.unwrap()
+            }
+        );
+
+        let surface_caps = surface.get_capabilities(&adapter);
+        // Shader code in this tutorial assumes an sRGB surface texture. Using a different
+        // one will result all the colors coming out darker. If you want to support non
+        // sRGB surfaces, you'll need to account for that when drawing to the frame.
+        let surface_format = surface_caps.formats.iter()
+            .copied()
+            .find(|f| f.is_srgb())            
+            .unwrap_or(surface_caps.formats[0]);
+        let config = wgpu::SurfaceConfiguration {
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            format: surface_format,
+            width: window.size.width as u32,
+            height: window.size.height as u32,
+            present_mode: surface_caps.present_modes[0],
+            alpha_mode: surface_caps.alpha_modes[0],
+            view_formats: vec![],
+        };
+        surface.configure(&device, &config);
+
+        let window_stuff = uGraphicsWindow {
+
+        };
+
         debug_error("jk everything ok");
         
         return true;
     } 
-
-    async fn getStuff(&self, surface: Surface) { let adapter: Adapter =  self.instance.request_adapter(
-        &wgpu::RequestAdapterOptions {
-            power_preference: wgpu::PowerPreference::default(),
-            compatible_surface: Some(&surface),
-            force_fallback_adapter: false,
-        },
-    ).await.unwrap(); 
-
-    let (device, queue): (Device, Queue) = adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            features: wgpu::Features::empty(),
-            // WebGL doesn't support all of wgpu's features, so if
-            // we're building for the web we'll have to disable some.
-            limits: if cfg!(target_arch = "wasm32") {
-                wgpu::Limits::downlevel_webgl2_defaults()
-            } else {
-                wgpu::Limits::default()
-            },
-            label: None,
-        },
-        None, // Trace path
-    ).await.unwrap();
-
-}
 
 }

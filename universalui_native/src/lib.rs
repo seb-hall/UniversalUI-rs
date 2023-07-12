@@ -26,7 +26,7 @@ use universalui_core::window_provider::*;
 
 pub fn native_window_provider() -> Box<dyn uWindowProvider> {
 
-    let graphics_provider = uGraphicsProvider::init();
+    let mut graphics_provider = uGraphicsProvider::init();
 
     return Box::new(native::uNativeWindowProvider{ raw_ptr: None, graphics_provider: graphics_provider });
 }

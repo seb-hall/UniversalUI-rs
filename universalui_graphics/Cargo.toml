@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+pollster = "0.3.0"
 universalui_core = { path = "../universalui_core" }
 wgpu = "0.16.2"
+raw-window-handle = "0.5.2"
