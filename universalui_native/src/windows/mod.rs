@@ -22,6 +22,7 @@ pub mod window;
 use universalui_core::debug::*;
 
 use universalui_core::{
+    geometry::*,
     window::*,
     window_provider::*,
     string::*,
@@ -38,40 +39,50 @@ use windows::Win32::UI::WindowsAndMessaging::*;
 use raw_window_handle::*;
 use std::os::raw::c_void;
 
+
+
 pub struct uNativeWindowProvider {
-    pub raw_ptr: Option<isize>,
-    pub graphics_provider: uGraphicsProvider
-}
+    pub raw_ptr: isize,
 
-impl uWindowProvider for uNativeWindowProvider {
-    fn create_window(&self, window: &uWindow) -> uWindowHandle { 
-        let handle = window::create_window(window, self.raw_ptr.unwrap(), &self.graphics_provider);
-        return handle;
-    }
+    //  setup window provider, return true if successful
+    pub setup: fn() -> bool,
 
-    fn run_event_loop(&self) {
-        let mut msg = MSG::default();
-                    
-        unsafe {
-            while GetMessageW(&mut msg, HWND(0), 0, 0).into() {
-                TranslateMessage(&msg);
-                DispatchMessageW(&msg);
-            }
-        }
-    }
+    //  create window and update window handle
+    pub create_window: fn(window: &mut uWindow),
 
-    fn set_window_controller(&self, window: &mut uWindow, controller: &dyn uWindowController) {
-
-    }
+    //  destroy window
+    pub destroy_window: fn(window: &mut uWindow) -> bool,
 
     //  set window title
-    fn set_window_title(&self, window: &mut uWindow, title: uString) {
+    pub set_window_title: fn(window: &mut uWindow, title: uString),
 
+    //  set window title
+    pub set_window_size: fn(window: &mut uWindow, title: uSize),
+}
+
+fn setup() -> bool { 
+    //self.setup_native();
+    return true;
+}
+
+fn destroy_window(window: &mut uWindow) -> bool { true }
+fn set_window_title(window: &mut uWindow, title: uString) { }
+fn set_window_size(window: &mut uWindow, size: uSize) { }
+
+impl uNativeWindowProvider {
+
+    pub fn init() -> uNativeWindowProvider {
+        return uNativeWindowProvider {
+            raw_ptr: 0,
+            setup: setup,
+            create_window: uNativeWindowProvider::create_window,
+            destroy_window: destroy_window, 
+            set_window_title: set_window_title, 
+            set_window_size: set_window_size,
+        };
     }
 
-    //  init function, register window class
-    fn init(&mut self) -> bool {
-
+    pub fn setup_native(&mut self) -> bool {
         debug_info("Initialising UniversalUI for Windows...");
 
         fn get_instance() -> Result<HMODULE> {
@@ -140,11 +151,42 @@ impl uWindowProvider for uNativeWindowProvider {
         };
 
         let raw: *mut uNativeWindowProvider = self;
-        self.raw_ptr = Some(raw as isize);
+
+        self.raw_ptr = raw as isize;
 
         return true;
     }
-      
+
+    
+
+    pub fn make_provider(&mut self) -> uWindowProvider {
+
+        fn myfunc(native: &mut uNativeWindowProvider, provider: &mut uWindowProvider, window: &mut uWindow) -> bool {
+            println!("CREATE WINDOW MYFUNC");
+            
+            return true;
+        };
+
+        return uWindowProvider {
+            setup: self.setup,
+            create_window: self.create_window,
+            destroy_window: self.destroy_window, 
+            set_window_title: self.set_window_title, 
+            set_window_size: self.set_window_size,
+            ..Default::default()
+        };
+    }
+
+    fn create_window(window: &mut uWindow) { 
+        println!("CREATE WINDOW NORMAL");
+        //true 
+    }
+
+    pub fn alternative(&self, window: &mut uWindow) { 
+        println!("CREATE WINDOW 2 BITCHES");
+        //true 
+    }
+    
 }
 
 unsafe extern "system" fn wndproc(window: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> LRESULT { 

@@ -13,24 +13,45 @@
 
 use crate::window::*;
 use crate::string::*;
-use crate::window_controller::uWindowController;
+use crate::geometry::*;
 
-//  uWindowProvider is implemented by the platform in order to
-//  create windows and to enable core functionality such as rendering.
-//  It also owns the window objects directly.
-pub trait uWindowProvider {
+//  uWindowProvider is implemented by the platform in order to 
+//  create and manage native windows.
+pub struct uWindowProvider {
 
-    //  initialise window provider, return true if successful
-    fn init(&mut self) -> bool;
+    //  setup window provider, return true if successful
+    pub setup: fn() -> bool,
 
     //  create window and update window handle
-    fn create_window(&self, window: &uWindow) -> uWindowHandle;
+    pub create_window: fn(window: &mut uWindow), 
+
+    //  destroy window
+    pub destroy_window: fn(window: &mut uWindow) -> bool,
 
     //  set window title
-    fn set_window_title(&self, window: &mut uWindow, title: uString);
+    pub set_window_title: fn(window: &mut uWindow, title: uString),
 
-    fn set_window_controller(&self, window: &mut uWindow, controller: &dyn uWindowController);
-
-    //  run event loop
-    fn run_event_loop(&self);
+    //  set window title
+    pub set_window_size: fn(window: &mut uWindow, title: uSize),
 }
+
+//  default setup to avoid optional variables
+impl Default for uWindowProvider {
+    fn default() -> Self {
+        return uWindowProvider { 
+            setup: default_setup, 
+            create_window: default_create_window, 
+            destroy_window: default_destroy_window, 
+            set_window_title: default_set_window_title, 
+            set_window_size: default_set_window_size,
+        };
+    }
+}
+
+//  default functions, do absolutely nothing besides return true for test functions
+fn default_setup() -> bool { true }
+fn default_create_window(window: &mut uWindow) {  }
+fn default_destroy_window(window: &mut uWindow) -> bool { true }
+fn default_set_window_title(window: &mut uWindow, title: uString) { }
+fn default_set_window_size(window: &mut uWindow, size: uSize) { }
+

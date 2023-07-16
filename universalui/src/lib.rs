@@ -21,7 +21,8 @@ pub mod native {
 use std::rc::Rc;
 
 use crate::core::debug::*;
-use universalui_core::{application::*, window};
+use universalui_core::{application::*, window::*};
+use universalui_native::native::uNativeWindowProvider;
 
 //  universalui_init function, this takes a mutable reference
 //  to an instance of uApplication and runs the main application
@@ -36,21 +37,14 @@ pub fn universalui_init(application: &mut dyn uApplication) {
     //  init graphics etc
 
     let mut window_provider = native::native_window_provider();
-
-    if !window_provider.init() {
-        return;
-    }
-
-    
-
-    let window_provider_reference = Rc::new(window_provider);
-    application.set_window_provider(window_provider_reference.clone());
+    window_provider.create_window = (uNativeWindowProvider::alternative)(&window_provider, window);
+    application.set_window_provider(window_provider.make_provider());
 
     debug_info(&format!("Initialising '{}' v{}.{}...", application.info().name.str(), application.info().major_version, application.info().minor_version)[..]);
 
     application.finished_launching();
 
-    window_provider_reference.run_event_loop();
+    //window_provider_reference.run_event_loop();
 
     debug_info("application completed with no issues");
 

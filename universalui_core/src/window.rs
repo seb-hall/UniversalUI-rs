@@ -48,8 +48,8 @@ pub struct uWindow {
     //  window handle, for windowing system
     handle: uWindowHandle,
 
-    //
-    controller: Option<Rc<dyn uWindowController>>
+    //  window controller
+    controller: Option<Box<dyn uWindowController>>
 
     //  returns a reference to the 
     //pub root: dyn uView;

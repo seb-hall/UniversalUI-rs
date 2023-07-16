@@ -20,13 +20,13 @@
 #[cfg_attr(windows, path = "windows/mod.rs")]
 pub mod native;
 
+use crate::native::*;
+
 use universalui_graphics::*;
 
 use universalui_core::window_provider::*;
 
-pub fn native_window_provider() -> Box<dyn uWindowProvider> {
+pub fn native_window_provider() -> uNativeWindowProvider {
 
-    let mut graphics_provider = uGraphicsProvider::init();
-
-    return Box::new(native::uNativeWindowProvider{ raw_ptr: None, graphics_provider: graphics_provider });
+    return uNativeWindowProvider::init();
 }

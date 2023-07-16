@@ -31,7 +31,7 @@ use raw_window_handle::*;
 use std::ffi::c_void;
 
 //  create window and update window handle
-pub fn create_window(window: &uWindow, provider: isize, mut graphics_provider: &uGraphicsProvider) -> uWindowHandle {
+pub fn create_window(window: &uWindow, provider: isize, graphics_provider: &mut uGraphicsProvider) -> uWindowHandle {
     fn get_instance() -> Result<HMODULE> {
         unsafe {
             let instance = GetModuleHandleA(None)?;
